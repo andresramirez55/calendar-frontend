@@ -9,8 +9,8 @@ require (
 	github.com/sendgrid/sendgrid-go v3.14.0+incompatible
 	github.com/twilio/twilio-go v1.19.0
 	gorm.io/driver/postgres v1.5.4
-	gorm.io/driver/sqlite v1.6.0
-	gorm.io/gorm v1.30.0
+	gorm.io/driver/sqlite v1.5.4
+	gorm.io/gorm v1.25.5
 )
 
 require (
