@@ -25,10 +25,7 @@ func InitDB() (*gorm.DB, error) {
 	if isPostgreSQL(cfg.DatabaseURL) {
 		DB, err = connectPostgreSQL(cfg.DatabaseURL)
 	} else {
-		// For production, use PostgreSQL
-		if os.Getenv("PORT") != "" {
-			return nil, fmt.Errorf("PostgreSQL database URL required for production deployment")
-		}
+		// Use SQLite for now (will switch to PostgreSQL later)
 		DB, err = connectSQLite(cfg.DatabaseURL)
 	}
 
