@@ -4,10 +4,10 @@ import (
 	"calendar-backend/models"
 	"calendar-backend/services"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type EventHandler struct {
@@ -45,7 +45,7 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 		ReminderDayBefore: req.ReminderDayBefore,
 	}
 
-	if err := h.db.Create(&event).Error; err != nil {
+	if err := h.eventService.CreateEvent(&event); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create event"})
 		return
 	}
@@ -55,32 +55,32 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 
 // GetEvents retrieves all events
 func (h *EventHandler) GetEvents(c *gin.Context) {
-	var events []models.Event
-
 	// Parse query parameters
 	date := c.Query("date")
 	startDate := c.Query("start_date")
 	endDate := c.Query("end_date")
+	search := c.Query("search")
 
-	query := h.db
+	var events []models.Event
+	var err error
 
-	if date != "" {
-		parsedDate, err := time.Parse("2006-01-02", date)
-		if err == nil {
-			query = query.Where("DATE(date) = DATE(?)", parsedDate)
-		}
+	// Determine which service method to use based on query parameters
+	if search != "" {
+		// Search events
+		events, err = h.eventService.SearchEvents(search)
+	} else if date != "" {
+		// Get events by specific date
+		events, err = h.eventService.GetEventsByDate(date)
+	} else if startDate != "" && endDate != "" {
+		// Get events by date range
+		events, err = h.eventService.GetEventsForDateRange(startDate, endDate)
+	} else {
+		// Get all events
+		events, err = h.eventService.GetAllEvents()
 	}
 
-	if startDate != "" && endDate != "" {
-		start, err1 := time.Parse("2006-01-02", startDate)
-		end, err2 := time.Parse("2006-01-02", endDate)
-		if err1 == nil && err2 == nil {
-			query = query.Where("date BETWEEN ? AND ?", start, end)
-		}
-	}
-
-	if err := query.Order("date ASC, time ASC").Find(&events).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch events"})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -89,15 +89,18 @@ func (h *EventHandler) GetEvents(c *gin.Context) {
 
 // GetEvent retrieves a specific event by ID
 func (h *EventHandler) GetEvent(c *gin.Context) {
-	id := c.Param("id")
+	idStr := c.Param("id")
 
-	var event models.Event
-	if err := h.db.First(&event, id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch event"})
+	// Convert string ID to uint
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		return
+	}
+
+	event, err := h.eventService.GetEventByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -106,15 +109,12 @@ func (h *EventHandler) GetEvent(c *gin.Context) {
 
 // UpdateEvent updates an existing event
 func (h *EventHandler) UpdateEvent(c *gin.Context) {
-	id := c.Param("id")
+	idStr := c.Param("id")
 
-	var event models.Event
-	if err := h.db.First(&event, id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch event"})
+	// Convert string ID to uint
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
 		return
 	}
 
@@ -123,6 +123,9 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Create event object with updated fields
+	event := &models.Event{}
 
 	// Update fields if provided
 	if req.Title != nil {
@@ -157,31 +160,49 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 	if req.ReminderDayBefore != nil {
 		event.ReminderDayBefore = *req.ReminderDayBefore
 	}
+	if req.IsAllDay != nil {
+		event.IsAllDay = *req.IsAllDay
+	}
+	if req.Color != nil {
+		event.Color = *req.Color
+	}
+	if req.Priority != nil {
+		event.Priority = *req.Priority
+	}
+	if req.Category != nil {
+		event.Category = *req.Category
+	}
 
-	if err := h.db.Save(&event).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update event"})
+	// Use service to update event
+	if err := h.eventService.UpdateEvent(uint(id), event); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, event)
+	// Get updated event to return
+	updatedEvent, err := h.eventService.GetEventByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch updated event"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedEvent)
 }
 
 // DeleteEvent deletes an event
 func (h *EventHandler) DeleteEvent(c *gin.Context) {
-	id := c.Param("id")
-
-	var event models.Event
-	if err := h.db.First(&event, id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch event"})
+	idStr := c.Param("id")
+	
+	// Convert string ID to uint
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
 		return
 	}
 
-	if err := h.db.Delete(&event).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete event"})
+	// Use service to delete event
+	if err := h.eventService.DeleteEvent(uint(id)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
