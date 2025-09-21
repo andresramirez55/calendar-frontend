@@ -20,20 +20,9 @@ func NewEventHandler(eventService services.EventService) *EventHandler {
 
 func (h *EventHandler) CreateEvent(c *gin.Context) {
 	var req dto.CreateEventRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
-	// Sanitizar y validar el DTO
-	req.Sanitize()
-	if err := req.Validate(); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// Convertir DTO a modelo Event
-	event, err := req.ToEvent()
+	// Procesar request completo en el DTO
+	event, err := req.ProcessRequest(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -117,19 +106,9 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 	}
 
 	var req dto.UpdateEventRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// Validar el DTO
-	if err := req.Validate(); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// Convertir DTO a modelo Event
-	event, err := req.ToEvent()
+	
+	// Procesar request completo en el DTO
+	event, err := req.ProcessRequest(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

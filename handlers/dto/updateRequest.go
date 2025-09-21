@@ -5,6 +5,8 @@ import (
 	"errors"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // UpdateEventRequest DTO para la actualización de eventos
@@ -197,4 +199,25 @@ func (req *UpdateEventRequest) applyCategoryColors(event *models.Event) {
 			event.Color = color
 		}
 	}
+}
+
+// ProcessRequest maneja todo el proceso: binding, validación y conversión
+func (req *UpdateEventRequest) ProcessRequest(c *gin.Context) (*models.Event, error) {
+	// 1. Binding del JSON
+	if err := c.ShouldBindJSON(req); err != nil {
+		return nil, err
+	}
+
+	// 2. Validar datos
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	// 3. Convertir a modelo Event
+	event, err := req.ToEvent()
+	if err != nil {
+		return nil, err
+	}
+
+	return event, nil
 }

@@ -5,6 +5,8 @@ import (
 	"errors"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // CreateEventRequest DTO para la creación de eventos
@@ -176,4 +178,28 @@ func (req *CreateEventRequest) Sanitize() {
 	if req.Priority != "" {
 		req.Priority = strings.ToLower(req.Priority)
 	}
+}
+
+// ProcessRequest maneja todo el proceso: binding, sanitización, validación y conversión
+func (req *CreateEventRequest) ProcessRequest(c *gin.Context) (*models.Event, error) {
+	// 1. Binding del JSON
+	if err := c.ShouldBindJSON(req); err != nil {
+		return nil, err
+	}
+
+	// 2. Sanitizar datos
+	req.Sanitize()
+
+	// 3. Validar datos
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	// 4. Convertir a modelo Event
+	event, err := req.ToEvent()
+	if err != nil {
+		return nil, err
+	}
+
+	return event, nil
 }
