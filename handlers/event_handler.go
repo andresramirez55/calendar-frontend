@@ -2,19 +2,19 @@ package handlers
 
 import (
 	"calendar-backend/models"
+	"calendar-backend/services"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type EventHandler struct {
-	db *gorm.DB
+	eventService services.EventService
 }
 
-func NewEventHandler(db *gorm.DB) *EventHandler {
-	return &EventHandler{db: db}
+func NewEventHandler(eventService services.EventService) *EventHandler {
+	return &EventHandler{eventService: eventService}
 }
 
 // CreateEvent creates a new calendar event

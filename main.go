@@ -6,6 +6,7 @@ import (
 
 	"calendar-backend/database"
 	"calendar-backend/handlers"
+	"calendar-backend/repositories"
 	"calendar-backend/routes"
 	"calendar-backend/services"
 
@@ -25,7 +26,11 @@ func main() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	// Initialize repositories
+	eventRepo := repositories.NewEventRepository(db)
+
 	// Initialize services
+	eventService := services.NewEventService(eventRepo)
 	notificationService := services.NewNotificationService()
 	schedulerService := services.NewSchedulerService(db, notificationService)
 
@@ -33,7 +38,7 @@ func main() {
 	go schedulerService.Start()
 
 	// Initialize handlers
-	eventHandler := handlers.NewEventHandler(db)
+	eventHandler := handlers.NewEventHandler(eventService)
 
 	// Initialize mobile handler
 	mobileHandler := handlers.NewMobileHandler(db)
