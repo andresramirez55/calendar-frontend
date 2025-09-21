@@ -7,57 +7,61 @@ import (
 	"time"
 )
 
-type EventService interface {
+// Interfaces específicas para cada operación
+type EventCreator interface {
 	CreateEvent(event *models.Event) error
+}
+
+type EventReader interface {
 	GetEventByID(id uint) (*models.Event, error)
 	GetAllEvents() ([]models.Event, error)
 	GetEventsByDate(date string) ([]models.Event, error)
-	UpdateEvent(id uint, event *models.Event) error
-	DeleteEvent(id uint) error
 	GetTodayEvents() ([]models.Event, error)
 	GetUpcomingEvents() ([]models.Event, error)
 	GetEventsForDateRange(startDate, endDate string) ([]models.Event, error)
 	SearchEvents(query string) ([]models.Event, error)
+}
+
+type EventUpdater interface {
+	UpdateEvent(id uint, event *models.Event) error
+}
+
+type EventDeleter interface {
+	DeleteEvent(id uint) error
+}
+
+type EventStatsProvider interface {
 	GetEventStats() (map[string]interface{}, error)
 }
 
+// Interface principal que combina todas las operaciones
+type EventService interface {
+	EventCreator
+	EventReader
+	EventUpdater
+	EventDeleter
+	EventStatsProvider
+}
+
 type eventService struct {
-	eventRepo repositories.EventRepository
+	eventRepo           repositories.EventRepository
+	creationService     *EventCreationService
+	updateService       *EventUpdateService
+	deletionService     *EventDeletionService
 }
 
 func NewEventService(eventRepo repositories.EventRepository) EventService {
 	return &eventService{
-		eventRepo: eventRepo,
+		eventRepo:           eventRepo,
+		creationService:     NewEventCreationService(eventRepo),
+		updateService:       NewEventUpdateService(eventRepo),
+		deletionService:     NewEventDeletionService(eventRepo),
 	}
 }
 
 func (s *eventService) CreateEvent(event *models.Event) error {
-	// Validaciones de negocio
-	if event.Title == "" {
-		return errors.New("title is required")
-	}
-	if event.Date.IsZero() {
-		return errors.New("date is required")
-	}
-	if event.Time == "" {
-		return errors.New("time is required")
-	}
-
-	// Validar formato de hora
-	_, err := time.Parse("15:04", event.Time)
-	if err != nil {
-		return errors.New("invalid time format, use HH:MM")
-	}
-
-	// Establecer valores por defecto
-	if event.Color == "" {
-		event.Color = "#007AFF"
-	}
-	if event.Priority == "" {
-		event.Priority = "medium"
-	}
-
-	return s.eventRepo.Create(event)
+	// Delegar al servicio específico de creación
+	return s.creationService.CreateEvent(event)
 }
 
 func (s *eventService) GetEventByID(id uint) (*models.Event, error) {
@@ -81,68 +85,13 @@ func (s *eventService) GetEventsByDate(date string) ([]models.Event, error) {
 }
 
 func (s *eventService) UpdateEvent(id uint, event *models.Event) error {
-	if id == 0 {
-		return errors.New("invalid event ID")
-	}
-
-	// Validar que el evento existe
-	existingEvent, err := s.eventRepo.GetByID(id)
-	if err != nil {
-		return errors.New("event not found")
-	}
-
-	// Actualizar solo los campos proporcionados
-	if event.Title != "" {
-		existingEvent.Title = event.Title
-	}
-	if event.Description != "" {
-		existingEvent.Description = event.Description
-	}
-	if !event.Date.IsZero() {
-		existingEvent.Date = event.Date
-	}
-	if event.Time != "" {
-		// Validar formato de hora
-		_, err := time.Parse("15:04", event.Time)
-		if err != nil {
-			return errors.New("invalid time format, use HH:MM")
-		}
-		existingEvent.Time = event.Time
-	}
-	if event.Location != "" {
-		existingEvent.Location = event.Location
-	}
-	if event.Email != "" {
-		existingEvent.Email = event.Email
-	}
-	if event.Phone != "" {
-		existingEvent.Phone = event.Phone
-	}
-	if event.Color != "" {
-		existingEvent.Color = event.Color
-	}
-	if event.Priority != "" {
-		existingEvent.Priority = event.Priority
-	}
-	if event.Category != "" {
-		existingEvent.Category = event.Category
-	}
-
-	return s.eventRepo.Update(id, existingEvent)
+	// Delegar al servicio específico de actualización
+	return s.updateService.UpdateEvent(id, event)
 }
 
 func (s *eventService) DeleteEvent(id uint) error {
-	if id == 0 {
-		return errors.New("invalid event ID")
-	}
-
-	// Validar que el evento existe
-	_, err := s.eventRepo.GetByID(id)
-	if err != nil {
-		return errors.New("event not found")
-	}
-
-	return s.eventRepo.Delete(id)
+	// Delegar al servicio específico de eliminación
+	return s.deletionService.DeleteEvent(id)
 }
 
 func (s *eventService) GetTodayEvents() ([]models.Event, error) {
