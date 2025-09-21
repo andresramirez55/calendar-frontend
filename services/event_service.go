@@ -34,6 +34,10 @@ type EventStatsProvider interface {
 	GetEventStats() (map[string]interface{}, error)
 }
 
+type EventQueryHandler interface {
+	GetEventsByQuery(queryType, search, date, startDate, endDate string) ([]models.Event, error)
+}
+
 // Interface principal que combina todas las operaciones
 type EventService interface {
 	EventCreator
@@ -41,6 +45,7 @@ type EventService interface {
 	EventUpdater
 	EventDeleter
 	EventStatsProvider
+	EventQueryHandler
 }
 
 type eventService struct {
@@ -124,4 +129,20 @@ func (s *eventService) SearchEvents(query string) ([]models.Event, error) {
 
 func (s *eventService) GetEventStats() (map[string]interface{}, error) {
 	return s.eventRepo.GetEventStats()
+}
+
+// GetEventsByQuery maneja la lógica de consulta basada en query parameters
+func (s *eventService) GetEventsByQuery(queryType, search, date, startDate, endDate string) ([]models.Event, error) {
+	switch queryType {
+	case "search":
+		return s.eventRepo.SearchEvents(search)
+	case "date":
+		return s.eventRepo.GetByDate(date)
+	case "date_range":
+		return s.eventRepo.GetEventsForDateRange(startDate, endDate)
+	case "all":
+		return s.eventRepo.GetAll()
+	default:
+		return s.eventRepo.GetAll()
+	}
 }

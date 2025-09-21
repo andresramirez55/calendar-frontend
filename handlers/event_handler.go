@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"calendar-backend/handlers/dto"
-	"calendar-backend/models"
 	"calendar-backend/services"
 	"net/http"
 	"strconv"
@@ -21,14 +20,12 @@ func NewEventHandler(eventService services.EventService) *EventHandler {
 func (h *EventHandler) CreateEvent(c *gin.Context) {
 	var req dto.CreateEventRequest
 
-	// Procesar request completo en el DTO
 	event, err := req.ProcessRequest(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Usar el servicio para crear el evento
 	if err := h.eventService.CreateEvent(event); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -40,32 +37,23 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 	})
 }
 
-// GetEvents retrieves all events
 func (h *EventHandler) GetEvents(c *gin.Context) {
-	// Parse query parameters
-	date := c.Query("date")
-	startDate := c.Query("start_date")
-	endDate := c.Query("end_date")
-	search := c.Query("search")
-
-	var events []models.Event
-	var err error
-
-	// Determine which service method to use based on query parameters
-	if search != "" {
-		// Search events
-		events, err = h.eventService.SearchEvents(search)
-	} else if date != "" {
-		// Get events by specific date
-		events, err = h.eventService.GetEventsByDate(date)
-	} else if startDate != "" && endDate != "" {
-		// Get events by date range
-		events, err = h.eventService.GetEventsForDateRange(startDate, endDate)
-	} else {
-		// Get all events
-		events, err = h.eventService.GetAllEvents()
+	var queryReq dto.GetEventsQueryRequest
+	
+	// Procesar query parameters
+	if err := queryReq.ProcessQueryRequest(c); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
+	// Obtener tipo de consulta y parámetros
+	queryType := queryReq.GetQueryType()
+	search := queryReq.GetSearchQuery()
+	date := queryReq.GetDate()
+	startDate, endDate := queryReq.GetDateRange()
+
+	// Usar el servicio para obtener eventos
+	events, err := h.eventService.GetEventsByQuery(queryType, search, date, startDate, endDate)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -106,7 +94,7 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 	}
 
 	var req dto.UpdateEventRequest
-	
+
 	// Procesar request completo en el DTO
 	event, err := req.ProcessRequest(c)
 	if err != nil {

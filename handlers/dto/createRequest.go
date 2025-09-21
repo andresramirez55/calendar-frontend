@@ -164,9 +164,7 @@ func (req *CreateEventRequest) applyCategoryColors() {
 	}
 }
 
-// Sanitize limpia y normaliza los datos del DTO
 func (req *CreateEventRequest) Sanitize() {
-	// Limpiar espacios en blanco
 	req.Title = strings.TrimSpace(req.Title)
 	req.Description = strings.TrimSpace(req.Description)
 	req.Location = strings.TrimSpace(req.Location)
@@ -174,28 +172,22 @@ func (req *CreateEventRequest) Sanitize() {
 	req.Phone = strings.TrimSpace(req.Phone)
 	req.Category = strings.TrimSpace(strings.ToLower(req.Category))
 
-	// Normalizar prioridad
 	if req.Priority != "" {
 		req.Priority = strings.ToLower(req.Priority)
 	}
 }
 
-// ProcessRequest maneja todo el proceso: binding, sanitización, validación y conversión
 func (req *CreateEventRequest) ProcessRequest(c *gin.Context) (*models.Event, error) {
-	// 1. Binding del JSON
 	if err := c.ShouldBindJSON(req); err != nil {
 		return nil, err
 	}
 
-	// 2. Sanitizar datos
 	req.Sanitize()
 
-	// 3. Validar datos
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
 
-	// 4. Convertir a modelo Event
 	event, err := req.ToEvent()
 	if err != nil {
 		return nil, err
