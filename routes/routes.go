@@ -6,18 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(router *gin.Engine, eventHandler *handlers.EventHandler) {
+func SetupRoutes(router *gin.Engine, eventController *handlers.EventController) {
 	// API v1 group
 	v1 := router.Group("/api/v1")
 	{
 		// Events endpoints
 		events := v1.Group("/events")
 		{
-			events.POST("/", eventHandler.CreateEvent)
-			events.GET("/", eventHandler.GetEvents)
-			events.GET("/:id", eventHandler.GetEvent)
-			events.PUT("/:id", eventHandler.UpdateEvent)
-			events.DELETE("/:id", eventHandler.DeleteEvent)
+			events.POST("/", eventController.CreateEvent)
+			events.GET("/", eventController.GetEvents)
+			events.GET("/:id", eventController.GetEvent)
+			events.PUT("/:id", eventController.UpdateEvent)
+			events.DELETE("/:id", eventController.DeleteEvent)
 		}
 	}
 }
@@ -36,9 +36,9 @@ func SetupMobileRoutes(router *gin.Engine, mobileHandler *handlers.MobileHandler
 }
 
 // SetupAllRoutes sets up both regular and mobile routes
-func SetupAllRoutes(router *gin.Engine, eventHandler *handlers.EventHandler, mobileHandler *handlers.MobileHandler) {
+func SetupAllRoutes(router *gin.Engine, eventController *handlers.EventController, mobileHandler *handlers.MobileHandler) {
 	// Setup regular routes
-	SetupRoutes(router, eventHandler)
+	SetupRoutes(router, eventController)
 
 	// Setup mobile routes
 	SetupMobileRoutes(router, mobileHandler)

@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type EventHandler struct {
+type EventController struct {
 	eventService services.EventService
 }
 
-func NewEventHandler(eventService services.EventService) *EventHandler {
-	return &EventHandler{eventService: eventService}
+func NewEventController(eventService services.EventService) *EventController {
+	return &EventController{eventService: eventService}
 }
 
-func (h *EventHandler) CreateEvent(c *gin.Context) {
+func (h *EventController) CreateEvent(c *gin.Context) {
 	var req dto.CreateEventRequest
 
 	event, err := req.ProcessRequest(c)
@@ -37,7 +37,7 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 	})
 }
 
-func (h *EventHandler) GetEvents(c *gin.Context) {
+func (h *EventController) GetEvents(c *gin.Context) {
 	var queryReq dto.GetEventsQueryRequest
 
 	if err := queryReq.ProcessQueryRequest(c); err != nil {
@@ -54,9 +54,11 @@ func (h *EventHandler) GetEvents(c *gin.Context) {
 	c.JSON(http.StatusOK, events)
 }
 
-func (h *EventHandler) GetEvent(c *gin.Context) {
+// GetEvent retrieves a specific event by ID
+func (h *EventController) GetEvent(c *gin.Context) {
 	idStr := c.Param("id")
 
+	// Convert string ID to uint
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
@@ -73,7 +75,7 @@ func (h *EventHandler) GetEvent(c *gin.Context) {
 }
 
 // UpdateEvent updates an existing event
-func (h *EventHandler) UpdateEvent(c *gin.Context) {
+func (h *EventController) UpdateEvent(c *gin.Context) {
 	idStr := c.Param("id")
 
 	// Convert string ID to uint
@@ -109,7 +111,7 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 }
 
 // DeleteEvent deletes an event
-func (h *EventHandler) DeleteEvent(c *gin.Context) {
+func (h *EventController) DeleteEvent(c *gin.Context) {
 	idStr := c.Param("id")
 
 	// Convert string ID to uint

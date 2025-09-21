@@ -38,14 +38,14 @@ func main() {
 	go schedulerService.Start()
 
 	// Initialize handlers
-	eventHandler := handlers.NewEventHandler(eventService)
+	eventController := handlers.NewEventController(eventService)
 
 	// Initialize mobile handler
 	mobileHandler := handlers.NewMobileHandler(db)
 
 	// Setup routes
 	router := gin.Default()
-	routes.SetupAllRoutes(router, eventHandler, mobileHandler)
+	routes.SetupAllRoutes(router, eventController, mobileHandler)
 
 	// Get port from environment or use default
 	port := os.Getenv("PORT")
