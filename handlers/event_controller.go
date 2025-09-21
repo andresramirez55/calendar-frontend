@@ -54,7 +54,6 @@ func (h *EventController) GetEvents(c *gin.Context) {
 	c.JSON(http.StatusOK, events)
 }
 
-// GetEvent retrieves a specific event by ID
 func (h *EventController) GetEvent(c *gin.Context) {
 	idStr := c.Param("id")
 
