@@ -39,21 +39,13 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 
 func (h *EventHandler) GetEvents(c *gin.Context) {
 	var queryReq dto.GetEventsQueryRequest
-	
-	// Procesar query parameters
+
 	if err := queryReq.ProcessQueryRequest(c); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Obtener tipo de consulta y parámetros
-	queryType := queryReq.GetQueryType()
-	search := queryReq.GetSearchQuery()
-	date := queryReq.GetDate()
-	startDate, endDate := queryReq.GetDateRange()
-
-	// Usar el servicio para obtener eventos
-	events, err := h.eventService.GetEventsByQuery(queryType, search, date, startDate, endDate)
+	events, err := h.eventService.GetEvents(&queryReq)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -49,11 +49,11 @@ func (req *GetEventsQueryRequest) ValidateDates() error {
 	if req.StartDate != "" && req.EndDate != "" {
 		start, err1 := time.Parse("2006-01-02", req.StartDate)
 		end, err2 := time.Parse("2006-01-02", req.EndDate)
-		
+
 		if err1 != nil || err2 != nil {
 			return errors.New("invalid date range format, use YYYY-MM-DD")
 		}
-		
+
 		// Validar que startDate no sea mayor que endDate
 		if start.After(end) {
 			return errors.New("start_date cannot be after end_date")
@@ -78,31 +78,3 @@ func (req *GetEventsQueryRequest) ValidateSearch() error {
 	return nil
 }
 
-// GetQueryType determina qué tipo de consulta realizar
-func (req *GetEventsQueryRequest) GetQueryType() string {
-	if req.Search != "" {
-		return "search"
-	}
-	if req.Date != "" {
-		return "date"
-	}
-	if req.StartDate != "" && req.EndDate != "" {
-		return "date_range"
-	}
-	return "all"
-}
-
-// GetSearchQuery retorna el término de búsqueda
-func (req *GetEventsQueryRequest) GetSearchQuery() string {
-	return req.Search
-}
-
-// GetDate retorna la fecha específica
-func (req *GetEventsQueryRequest) GetDate() string {
-	return req.Date
-}
-
-// GetDateRange retorna el rango de fechas
-func (req *GetEventsQueryRequest) GetDateRange() (string, string) {
-	return req.StartDate, req.EndDate
-}

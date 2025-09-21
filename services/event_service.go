@@ -1,6 +1,7 @@
 package services
 
 import (
+	"calendar-backend/handlers/dto"
 	"calendar-backend/models"
 	"calendar-backend/repositories"
 	"errors"
@@ -35,7 +36,7 @@ type EventStatsProvider interface {
 }
 
 type EventQueryHandler interface {
-	GetEventsByQuery(queryType, search, date, startDate, endDate string) ([]models.Event, error)
+	GetEvents(queryReq interface{}) ([]models.Event, error)
 }
 
 // Interface principal que combina todas las operaciones
@@ -49,18 +50,18 @@ type EventService interface {
 }
 
 type eventService struct {
-	eventRepo           repositories.EventRepository
-	creationService     *EventCreationService
-	updateService       *EventUpdateService
-	deletionService     *EventDeletionService
+	eventRepo       repositories.EventRepository
+	creationService *EventCreationService
+	updateService   *EventUpdateService
+	deletionService *EventDeletionService
 }
 
 func NewEventService(eventRepo repositories.EventRepository) EventService {
 	return &eventService{
-		eventRepo:           eventRepo,
-		creationService:     NewEventCreationService(eventRepo),
-		updateService:       NewEventUpdateService(eventRepo),
-		deletionService:     NewEventDeletionService(eventRepo),
+		eventRepo:       eventRepo,
+		creationService: NewEventCreationService(eventRepo),
+		updateService:   NewEventUpdateService(eventRepo),
+		deletionService: NewEventDeletionService(eventRepo),
 	}
 }
 
@@ -131,18 +132,25 @@ func (s *eventService) GetEventStats() (map[string]interface{}, error) {
 	return s.eventRepo.GetEventStats()
 }
 
-// GetEventsByQuery maneja la lógica de consulta basada en query parameters
-func (s *eventService) GetEventsByQuery(queryType, search, date, startDate, endDate string) ([]models.Event, error) {
-	switch queryType {
-	case "search":
-		return s.eventRepo.SearchEvents(search)
-	case "date":
-		return s.eventRepo.GetByDate(date)
-	case "date_range":
-		return s.eventRepo.GetEventsForDateRange(startDate, endDate)
-	case "all":
-		return s.eventRepo.GetAll()
-	default:
-		return s.eventRepo.GetAll()
+// GetEvents maneja la lógica de consulta basada en query parameters
+func (s *eventService) GetEvents(queryReq interface{}) ([]models.Event, error) {
+	// Type assertion para obtener el DTO
+	req, ok := queryReq.(*dto.GetEventsQueryRequest)
+	if !ok {
+		return nil, errors.New("invalid query request type")
 	}
+
+	// Lógica de decisión basada en los campos del DTO
+	if req.Search != "" {
+		return s.eventRepo.SearchEvents(req.Search)
+	}
+	if req.Date != "" {
+		return s.eventRepo.GetByDate(req.Date)
+	}
+	if req.StartDate != "" && req.EndDate != "" {
+		return s.eventRepo.GetEventsForDateRange(req.StartDate, req.EndDate)
+	}
+	
+	// Por defecto, obtener todos los eventos
+	return s.eventRepo.GetAll()
 }
