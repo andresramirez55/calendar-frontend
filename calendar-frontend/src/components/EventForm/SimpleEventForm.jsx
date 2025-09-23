@@ -57,7 +57,7 @@ const SimpleEventForm = ({ event, onClose }) => {
     try {
       const eventData = {
         ...formData,
-        date: formData.date + 'T00:00:00Z' // Convertir a formato ISO
+        date: formData.date // Usar formato YYYY-MM-DD directamente
       };
 
       if (event) {
@@ -71,7 +71,7 @@ const SimpleEventForm = ({ event, onClose }) => {
       onClose();
     } catch (error) {
       console.error('Error saving event:', error);
-      alert('Error al guardar el evento');
+      alert(`Error al guardar el evento: ${error.message || 'Error desconocido'}`);
     } finally {
       setLoading(false);
     }

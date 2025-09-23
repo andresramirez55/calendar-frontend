@@ -38,14 +38,17 @@ func (s *EventCreationService) validateEvent(event *models.Event) error {
 	if event.Date.IsZero() {
 		return errors.New("date is required")
 	}
-	if event.Time == "" {
-		return errors.New("time is required")
-	}
+	// Validar formato de hora solo si no es evento de todo el día
+	if !event.IsAllDay {
+		if event.Time == "" {
+			return errors.New("time is required for non-all-day events")
+		}
 
-	// Validar formato de hora
-	_, err := time.Parse("15:04", event.Time)
-	if err != nil {
-		return errors.New("invalid time format, use HH:MM")
+		// Validar formato de hora
+		_, err := time.Parse("15:04", event.Time)
+		if err != nil {
+			return errors.New("invalid time format, use HH:MM")
+		}
 	}
 
 	// Validar que la fecha no sea en el pasado (opcional)

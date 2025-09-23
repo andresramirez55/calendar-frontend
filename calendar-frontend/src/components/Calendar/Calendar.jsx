@@ -26,9 +26,17 @@ const Calendar = () => {
       // Extraer solo la fecha (sin la parte de tiempo)
       const dateOnly = event.date.split('T')[0];
       
-      // Crear fechas válidas
-      const startDate = new Date(`${dateOnly}T${event.time}:00`);
-      const endDate = new Date(`${dateOnly}T${event.end_time || event.time}:00`);
+      let startDate, endDate;
+      
+      if (event.is_all_day || !event.time) {
+        // Evento de todo el día
+        startDate = new Date(`${dateOnly}T00:00:00`);
+        endDate = new Date(`${dateOnly}T23:59:59`);
+      } else {
+        // Evento con hora específica
+        startDate = new Date(`${dateOnly}T${event.time}:00`);
+        endDate = new Date(`${dateOnly}T${event.end_time || event.time}:00`);
+      }
       
       return {
         id: event.id,

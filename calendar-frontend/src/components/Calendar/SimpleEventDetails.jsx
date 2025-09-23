@@ -8,12 +8,13 @@ const SimpleEventDetails = ({ event, onClose, onEdit }) => {
   const handleDelete = async () => {
     if (window.confirm('¿Estás seguro de que quieres eliminar este evento?')) {
       setDeleting(true);
+      
       try {
         await deleteEvent(event.id);
         onClose();
       } catch (error) {
         console.error('Error deleting event:', error);
-        alert('Error al eliminar el evento');
+        alert(`Error al eliminar el evento: ${error.message || 'Error desconocido'}`);
       } finally {
         setDeleting(false);
       }
@@ -21,8 +22,6 @@ const SimpleEventDetails = ({ event, onClose, onEdit }) => {
   };
 
   if (!event) return null;
-
-  console.log('SimpleEventDetails rendering with event:', event);
 
   return (
     <div style={{

@@ -108,9 +108,11 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(true);
       const events = await eventService.getAllEvents();
       actions.setEvents(events);
+      actions.setLoading(false);
     } catch (error) {
       console.error('Error fetching events:', error);
       actions.setError(error.message);
+      actions.setLoading(false);
     }
   };
 
@@ -128,9 +130,11 @@ export const EventProvider = ({ children }) => {
         reminderService.addReminder(newEvent.event, 'day_before');
       }
       
+      actions.setLoading(false);
       return newEvent;
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
       throw error;
     }
   };
@@ -140,9 +144,11 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(true);
       const updatedEvent = await eventService.updateEvent(id, eventData);
       actions.updateEvent(updatedEvent);
+      actions.setLoading(false);
       return updatedEvent;
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
       throw error;
     }
   };
@@ -151,13 +157,15 @@ export const EventProvider = ({ children }) => {
     try {
       actions.setLoading(true);
       await eventService.deleteEvent(id);
-      
+
       // Limpiar recordatorios del evento eliminado
       reminderService.cleanupReminders(id);
-      
+
       actions.deleteEvent(id);
+      actions.setLoading(false);
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
       throw error;
     }
   };
@@ -167,8 +175,10 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(true);
       const events = await eventService.searchEvents(query);
       actions.setEvents(events);
+      actions.setLoading(false);
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
     }
   };
 
@@ -177,8 +187,10 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(true);
       const events = await eventService.getEventsByDate(date);
       actions.setEvents(events);
+      actions.setLoading(false);
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
     }
   };
 
@@ -187,8 +199,10 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(true);
       const events = await eventService.getEventsByDateRange(startDate, endDate);
       actions.setEvents(events);
+      actions.setLoading(false);
     } catch (error) {
       actions.setError(error.message);
+      actions.setLoading(false);
     }
   };
 
