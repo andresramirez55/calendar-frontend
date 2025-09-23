@@ -1,10 +1,23 @@
 import axios from 'axios';
 
 // Configuración base de la API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const getApiUrl = () => {
+  // Si estamos en desarrollo, usar localhost
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8080';
+  }
+  
+  // Si hay una variable de entorno específica, usarla
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Por defecto, usar el backend en Render
+  return 'https://calendar-backend-4k8h.onrender.com';
+};
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
