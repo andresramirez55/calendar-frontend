@@ -12,8 +12,8 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // Por defecto, usar el backend en Render
-  return 'https://calendar-backend-4k8h.onrender.com';
+  // Por defecto, usar el backend en Railway
+  return 'https://calendar-backend-production.up.railway.app';
 };
 
 const api = axios.create({
