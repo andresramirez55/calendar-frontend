@@ -6,6 +6,7 @@ import (
 
 	"calendar-backend/database"
 	"calendar-backend/handlers"
+	"calendar-backend/models"
 	"calendar-backend/repositories"
 	"calendar-backend/routes"
 	"calendar-backend/services"
@@ -30,6 +31,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
+
+	// Auto-migrate the schema
+	if err := db.AutoMigrate(&models.Event{}); err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	log.Println("Database migration completed successfully")
 
 	// Initialize repositories
 	eventRepo := repositories.NewEventRepository(db)
