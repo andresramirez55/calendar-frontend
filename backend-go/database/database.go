@@ -48,9 +48,16 @@ func InitDB() (*gorm.DB, error) {
 }
 
 func connectPostgreSQL(databaseURL string) (*gorm.DB, error) {
-	return gorm.Open(postgres.Open(databaseURL), &gorm.Config{
+	log.Printf("Attempting to connect to PostgreSQL with URL: %s", databaseURL)
+	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
+	if err != nil {
+		log.Printf("Failed to connect to PostgreSQL: %v", err)
+		return nil, err
+	}
+	log.Println("Successfully connected to PostgreSQL")
+	return db, nil
 }
 
 func connectSQLite(databaseURL string) (*gorm.DB, error) {
@@ -68,7 +75,7 @@ func connectSQLite(databaseURL string) (*gorm.DB, error) {
 }
 
 func isPostgreSQL(databaseURL string) bool {
-	return len(databaseURL) > 11 && databaseURL[:11] == "postgresql:"
+	return len(databaseURL) > 11 && (databaseURL[:11] == "postgresql:" || databaseURL[:8] == "postgres:")
 }
 
 func getDBType(databaseURL string) string {
