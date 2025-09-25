@@ -106,12 +106,46 @@ export const EventProvider = ({ children }) => {
   const fetchEvents = async () => {
     try {
       actions.setLoading(true);
-      const events = await eventService.getAllEvents();
+      const response = await eventService.getAllEvents();
+      
+      // Asegurar que la respuesta sea un array
+      let events = [];
+      if (Array.isArray(response)) {
+        events = response;
+      } else if (response && Array.isArray(response.events)) {
+        events = response.events;
+      } else if (response && Array.isArray(response.data)) {
+        events = response.data;
+      } else {
+        console.warn('Unexpected API response format:', response);
+        events = [];
+      }
+      
       actions.setEvents(events);
       actions.setLoading(false);
     } catch (error) {
       console.error('Error fetching events:', error);
-      actions.setError(error.message);
+      actions.setError(`Error de conexión: ${error.message}. El backend puede estar desplegándose.`);
+      
+      // Datos de demostración temporal
+      const demoEvents = [
+        {
+          id: 1,
+          title: "Evento de demostración",
+          description: "Este es un evento de ejemplo",
+          date: "2025-09-25T10:00:00Z",
+          time: "10:00",
+          location: "Oficina",
+          email: "demo@example.com",
+          phone: "123-456-7890",
+          is_all_day: false,
+          color: "#3b82f6",
+          priority: "medium",
+          category: "Trabajo"
+        }
+      ];
+      
+      actions.setEvents(demoEvents);
       actions.setLoading(false);
     }
   };

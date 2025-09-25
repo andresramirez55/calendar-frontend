@@ -22,6 +22,12 @@ const Calendar = () => {
 
   // Convertir eventos al formato del calendario
   const calendarEvents = useMemo(() => {
+    // Asegurar que events sea un array
+    if (!Array.isArray(events)) {
+      console.warn('Events is not an array:', events);
+      return [];
+    }
+    
     return events.map(event => {
       // Extraer solo la fecha (sin la parte de tiempo)
       const dateOnly = event.date.split('T')[0];

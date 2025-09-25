@@ -16,6 +16,11 @@ const getApiUrl = () => {
   return 'https://calendar-backend-production.up.railway.app';
 };
 
+// Log para debug
+console.log('API URL:', getApiUrl());
+console.log('Environment:', import.meta.env.MODE);
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+
 const api = axios.create({
   baseURL: getApiUrl(),
   headers: {
