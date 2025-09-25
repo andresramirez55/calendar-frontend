@@ -1,35 +1,23 @@
-# Build stage
-FROM golang:1.21-alpine AS builder
+# Use Node.js 18 as base image
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Copy go mod files
-COPY go.mod go.sum ./
+# Copy package files
+COPY package*.json ./
 
-# Download dependencies
-RUN go mod download
+# Install dependencies
+RUN npm install
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o calendar-backend .
-
-# Final stage
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
-
-# Copy the binary from builder stage
-COPY --from=builder /app/calendar-backend .
-
-# Copy environment file
-COPY --from=builder /app/env.example .env
+RUN npm run build
 
 # Expose port
-EXPOSE 8080
+EXPOSE 4173
 
-# Run the application
-CMD ["./calendar-backend"]
+# Start the application
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
