@@ -228,18 +228,10 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-full">
-      {/* Header del calendario mejorado */}
-      <div className="calendar-header">
-        <div className="calendar-title">
-          <div className="logo-icon">📅</div>
-          <div>
-            <h1>Mi Calendario</h1>
-            <p className="text-sm text-gray-600 mt-1">Gestiona tus eventos familiares</p>
-          </div>
-        </div>
-        
-        <div className="calendar-controls">
+    <div className="w-full p-6">
+      {/* Controles del calendario */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
           {/* Selector de vista */}
           <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
             <button
@@ -274,36 +266,38 @@ const Calendar = () => {
             </button>
           </div>
 
-          {selectedDateForDelete && view === 'calendar' && (
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg">
-                📅 {selectedDateForDelete}
-              </span>
-              {(() => {
-                const eventsOnDate = events.filter(event => {
-                  const eventDate = event.date.split('T')[0];
-                  return eventDate === selectedDateForDelete;
-                });
-                
-                return eventsOnDate.length > 0 ? (
-                  <button
-                    onClick={handleDeleteEventsFromDate}
-                    className="btn btn-danger"
-                  >
-                    🗑️ Eliminar ({eventsOnDate.length})
-                  </button>
-                ) : null;
-              })()}
-            </div>
-          )}
-          
+          {/* Botón nuevo evento */}
           <button
             onClick={() => setShowEventForm(true)}
-            className="btn btn-primary"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
           >
             ➕ Nuevo Evento
           </button>
         </div>
+
+        {/* Controles adicionales para calendario */}
+        {selectedDateForDelete && view === 'calendar' && (
+          <div className="flex items-center gap-2 mt-4">
+            <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg">
+              📅 {selectedDateForDelete}
+            </span>
+            {(() => {
+              const eventsOnDate = events.filter(event => {
+                const eventDate = event.date.split('T')[0];
+                return eventDate === selectedDateForDelete;
+              });
+              
+              return eventsOnDate.length > 0 ? (
+                <button
+                  onClick={handleDeleteEventsFromDate}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-lg text-sm transition-colors"
+                >
+                  🗑️ Eliminar ({eventsOnDate.length})
+                </button>
+              ) : null;
+            })()}
+          </div>
+        )}
       </div>
 
       {/* Contenido principal según la vista */}
