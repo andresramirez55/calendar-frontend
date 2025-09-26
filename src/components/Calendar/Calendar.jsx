@@ -202,9 +202,9 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-full max-w-none">
+    <div className="w-full">
       {/* Header del calendario */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-t-2xl border-b border-white/20 shadow-lg p-6">
+      <div className="bg-white/95 backdrop-blur-lg rounded-t-2xl border-b border-white/20 shadow-lg p-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
             <span className="text-3xl">📅</span>
@@ -245,7 +245,7 @@ const Calendar = () => {
       </div>
 
       {/* Calendario principal */}
-      <div className="w-full p-4 lg:p-6">
+      <div className="w-full p-2">
         <div className="bg-white/95 backdrop-blur-lg rounded-b-2xl shadow-xl border border-white/20 overflow-hidden min-h-[600px] w-full">
                 <BigCalendar
                   localizer={localizer}

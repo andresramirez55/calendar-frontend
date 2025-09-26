@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
     <div className="min-h-screen">
       {/* Modern Header */}
       <header className="bg-white/90 backdrop-blur-lg border-b border-white/20 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3">

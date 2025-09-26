@@ -20,13 +20,17 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 #root {
   display: flex;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* Modern Button Styles */
@@ -221,6 +225,7 @@ body {
   height: 600px;
   width: 100% !important;
   min-width: 100% !important;
+  max-width: none !important;
   font-family: 'Inter', sans-serif;
   background: transparent;
   border-radius: 0;
@@ -228,6 +233,18 @@ body {
   backdrop-filter: none;
   border: none;
   overflow: hidden;
+}
+
+/* Force full width for all containers */
+.w-full {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Ensure no container constraints */
+.container, .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl, .max-w-3xl, .max-w-2xl, .max-w-xl, .max-w-lg, .max-w-md, .max-w-sm {
+  max-width: none !important;
+  width: 100% !important;
 }
 
 .rbc-event {

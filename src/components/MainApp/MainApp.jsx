@@ -138,7 +138,7 @@ const MainApp = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="w-full max-w-none px-4 py-6">
+      <div className="w-full px-2 py-4">
         <div className="space-y-6">
           {/* Toggle de vista */}
           <div className="flex justify-center">
