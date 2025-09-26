@@ -16,8 +16,8 @@ const SimpleEventForm = ({ event, onClose }) => {
     phone: '',
     category: 'work',
     priority: 'medium',
-    reminder_day: false,
-    reminder_day_before: false,
+    reminder_day: true,
+    reminder_day_before: true,
     is_all_day: false
   });
 
@@ -58,31 +58,24 @@ const SimpleEventForm = ({ event, onClose }) => {
 
     try {
       // Validar campos requeridos
-      if (!formData.title || !formData.date || !formData.time) {
-        alert('Por favor completa todos los campos requeridos');
+      if (!formData.title || !formData.date) {
+        alert('Por favor completa el título y la fecha del evento');
         setLoading(false);
         return;
       }
 
-      // Validar email si se proporciona
-      if (formData.email && !formData.email.includes('@')) {
-        alert('Por favor ingresa un email válido');
-        setLoading(false);
-        return;
-      }
-
-      // Validar teléfono si se proporciona
-      if (formData.phone && formData.phone.length < 10) {
-        alert('El teléfono debe tener al menos 10 caracteres');
-        setLoading(false);
-        return;
-      }
 
       const eventData = {
-        ...formData,
-        date: formData.date, // Usar formato YYYY-MM-DD directamente
-        email: formData.email || 'demo@ejemplo.com', // Email por defecto
-        phone: formData.phone || '1234567890' // Teléfono por defecto
+        title: formData.title,
+        date: formData.date,
+        location: formData.location || '',
+        reminder_day: formData.reminder_day,
+        reminder_day_before: formData.reminder_day_before,
+        is_all_day: true, // Todos los eventos son de todo el día
+        email: 'demo@ejemplo.com', // Email por defecto
+        phone: '1234567890', // Teléfono por defecto
+        category: 'personal', // Categoría por defecto
+        priority: 'medium' // Prioridad por defecto
       };
 
       console.log('Enviando datos:', eventData);
@@ -153,20 +146,20 @@ const SimpleEventForm = ({ event, onClose }) => {
           <div className="space-y-4">
             {/* Solo los campos esenciales */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">¿Qué evento vas a crear? *</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Nombre del evento"
+                placeholder="Ej: Cumpleaños de María, Reunión de trabajo, Cita médica..."
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">¿Cuándo será? *</label>
               <input
                 type="date"
                 name="date"
@@ -178,27 +171,43 @@ const SimpleEventForm = ({ event, onClose }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Hora *</label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">¿Dónde será? (opcional)</label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="¿Dónde?"
+                placeholder="Ej: Casa, Oficina, Hospital..."
               />
+            </div>
+
+            {/* Recordatorios automáticos */}
+            <div className="bg-blue-50 p-3 rounded-md">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="reminder_day_before"
+                  checked={formData.reminder_day_before}
+                  onChange={handleChange}
+                  className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="text-sm text-blue-800">
+                  📅 Recordarme el día anterior
+                </span>
+              </div>
+              <div className="flex items-center mt-2">
+                <input
+                  type="checkbox"
+                  name="reminder_day"
+                  checked={formData.reminder_day}
+                  onChange={handleChange}
+                  className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <span className="text-sm text-blue-800">
+                  🔔 Recordarme el mismo día
+                </span>
+              </div>
             </div>
           </div>
 
