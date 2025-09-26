@@ -33,17 +33,21 @@ const SimpleEventForm = ({ event, onClose }) => {
   // Cargar configuración familiar
   useEffect(() => {
     const savedConfig = localStorage.getItem('familyConfig');
+    console.log('🔍 Loading family config:', savedConfig);
     if (savedConfig) {
       try {
         const config = JSON.parse(savedConfig);
+        console.log('✅ Family config loaded:', config);
         setFamilyConfig(config);
         setFormData(prev => ({
           ...prev,
           family_members: config.familyMembers || []
         }));
       } catch (error) {
-        console.error('Error loading family config:', error);
+        console.error('❌ Error loading family config:', error);
       }
+    } else {
+      console.log('⚠️ No family config found in localStorage');
     }
   }, []);
 
@@ -257,7 +261,12 @@ const SimpleEventForm = ({ event, onClose }) => {
             </div>
 
             {/* Notificaciones familiares */}
-            {familyConfig && familyConfig.familyMembers && familyConfig.familyMembers.length > 0 && (
+            {(() => {
+              console.log('🔍 Checking family config:', familyConfig);
+              console.log('🔍 Family members:', familyConfig?.familyMembers);
+              console.log('🔍 Family members length:', familyConfig?.familyMembers?.length);
+              return familyConfig && familyConfig.familyMembers && familyConfig.familyMembers.length > 0;
+            })() && (
               <div className="bg-pink-50 p-3 rounded-md">
                 <h4 className="text-sm font-medium text-pink-800 mb-2">👨‍👩‍👧‍👦 Notificar a la familia</h4>
                 
