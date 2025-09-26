@@ -146,7 +146,9 @@ export const EventProvider = ({ children }) => {
       // Determinar el tipo de error y mostrar mensaje apropiado
       let errorMessage = 'Error desconocido al cargar eventos';
       
-      if (error.code === 'NETWORK_ERROR' || !navigator.onLine) {
+      if (error.message && error.message.includes('HTML en lugar de JSON')) {
+        errorMessage = 'El backend no está funcionando correctamente. Usando modo de demostración.';
+      } else if (error.code === 'NETWORK_ERROR' || !navigator.onLine) {
         errorMessage = 'Sin conexión a internet. Verifica tu conexión y vuelve a intentar.';
       } else if (error.response?.status === 404) {
         errorMessage = 'El servicio no está disponible. Intenta más tarde.';
@@ -158,27 +160,79 @@ export const EventProvider = ({ children }) => {
       
       actions.setError(errorMessage);
       
-      // Datos de demostración temporal solo si es un error de conexión
-      if (error.code === 'NETWORK_ERROR' || error.response?.status >= 500) {
-        const demoEvents = [
-          {
-            id: 1,
-            title: "Evento de demostración",
-            description: "Este es un evento de ejemplo",
-            date: "2025-09-25T10:00:00Z",
-            time: "10:00",
-            location: "Oficina",
-            email: "demo@example.com",
-            phone: "123-456-7890",
-            is_all_day: false,
-            color: "#3b82f6",
-            priority: "medium",
-            category: "Trabajo"
-          }
-        ];
-        
-        actions.setEvents(demoEvents);
-      }
+      // Datos de demostración temporal para mostrar funcionalidad
+      const demoEvents = [
+        {
+          id: 1,
+          title: "Cumpleaños de María",
+          description: "Cumpleaños de nuestra hija María",
+          date: "2025-10-15T00:00:00Z",
+          time: "00:00",
+          location: "Casa",
+          email: "papa@familia.com",
+          phone: "+1234567890",
+          is_all_day: true,
+          color: "#f97316",
+          priority: "high",
+          category: "birthday",
+          share_with: "both",
+          kids_involved: ["María"],
+          is_family_event: true
+        },
+        {
+          id: 2,
+          title: "Cita médica - Sofía",
+          description: "Revisión pediátrica",
+          date: "2025-09-30T14:00:00Z",
+          time: "14:00",
+          location: "Clínica San José",
+          email: "mama@familia.com",
+          phone: "+1234567891",
+          is_all_day: false,
+          color: "#ef4444",
+          priority: "high",
+          category: "medical",
+          share_with: "both",
+          kids_involved: ["Sofía"],
+          is_family_event: true
+        },
+        {
+          id: 3,
+          title: "Actividad escolar - Ana",
+          description: "Presentación de proyecto",
+          date: "2025-10-05T09:00:00Z",
+          time: "09:00",
+          location: "Escuela Primaria",
+          email: "papa@familia.com",
+          phone: "+1234567890",
+          is_all_day: false,
+          color: "#8b5cf6",
+          priority: "medium",
+          category: "school",
+          share_with: "both",
+          kids_involved: ["Ana"],
+          is_family_event: true
+        },
+        {
+          id: 4,
+          title: "Reunión familiar",
+          description: "Almuerzo familiar dominical",
+          date: "2025-10-06T12:00:00Z",
+          time: "12:00",
+          location: "Casa de los abuelos",
+          email: "mama@familia.com",
+          phone: "+1234567891",
+          is_all_day: false,
+          color: "#10b981",
+          priority: "medium",
+          category: "family",
+          share_with: "both",
+          kids_involved: ["María", "Sofía", "Ana", "Lucía"],
+          is_family_event: true
+        }
+      ];
+      
+      actions.setEvents(demoEvents);
       
       actions.setLoading(false);
     }

@@ -72,17 +72,42 @@ const Layout = ({ children }) => {
 
       {/* Modern Error notification */}
       {error && (
-        <div className="fixed top-4 right-4 bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-2xl shadow-lg z-50 max-w-md animate-slideUp backdrop-blur-lg">
+        <div className={`fixed top-4 right-4 border px-6 py-4 rounded-2xl shadow-lg z-50 max-w-md animate-slideUp backdrop-blur-lg ${
+          error.includes('demostración') || error.includes('HTML en lugar de JSON') 
+            ? 'bg-yellow-50 border-yellow-200 text-yellow-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                <span className="text-red-600 text-sm">⚠️</span>
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                error.includes('demostración') || error.includes('HTML en lugar de JSON')
+                  ? 'bg-yellow-100'
+                  : 'bg-red-100'
+              }`}>
+                <span className={`text-sm ${
+                  error.includes('demostración') || error.includes('HTML en lugar de JSON')
+                    ? 'text-yellow-600'
+                    : 'text-red-600'
+                }`}>
+                  {error.includes('demostración') || error.includes('HTML en lugar de JSON') ? '💡' : '⚠️'}
+                </span>
               </div>
-              <span className="font-medium">{error}</span>
+              <div>
+                <span className="font-medium">{error}</span>
+                {error.includes('demostración') && (
+                  <p className="text-xs opacity-75 mt-1">
+                    Los datos mostrados son de demostración
+                  </p>
+                )}
+              </div>
             </div>
             <button
               onClick={clearError}
-              className="ml-4 text-red-600 hover:text-red-800 hover:bg-red-100 p-1 rounded-full transition-all duration-200"
+              className={`ml-4 p-1 rounded-full transition-all duration-200 ${
+                error.includes('demostración') || error.includes('HTML en lugar de JSON')
+                  ? 'text-yellow-600 hover:text-yellow-800 hover:bg-yellow-100'
+                  : 'text-red-600 hover:text-red-800 hover:bg-red-100'
+              }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
