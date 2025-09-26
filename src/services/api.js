@@ -47,6 +47,12 @@ api.interceptors.response.use(
       throw new Error('BACKEND_NOT_AVAILABLE');
     }
     
+    // Si es un error 404, el backend no está funcionando
+    if (error.response && error.response.status === 404) {
+      console.warn('Backend returned 404, backend may be down');
+      throw new Error('BACKEND_NOT_AVAILABLE');
+    }
+    
     // Si la respuesta es HTML, el backend no está funcionando
     if (error.response && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('<!doctype html>')) {
       console.warn('Backend returned HTML, backend may be down');
