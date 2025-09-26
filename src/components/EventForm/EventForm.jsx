@@ -76,36 +76,71 @@ const EventForm = ({ event, onClose }) => {
     }
   };
 
-  // Validar formulario
+  // Validar formulario con validaciones mejoradas
   const validateForm = () => {
     const newErrors = {};
 
+    // Validar título
     if (!formData.title.trim()) {
       newErrors.title = 'El título es requerido';
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = 'El título debe tener al menos 3 caracteres';
+    } else if (formData.title.trim().length > 100) {
+      newErrors.title = 'El título no puede exceder 100 caracteres';
     }
 
+    // Validar fecha
     if (!formData.date) {
       newErrors.date = 'La fecha es requerida';
+    } else {
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        newErrors.date = 'La fecha no puede ser anterior a hoy';
+      }
     }
 
+    // Validar hora
     if (!formData.time) {
       newErrors.time = 'La hora es requerida';
     }
 
+    // Validar hora de fin
     if (formData.end_time && formData.end_time <= formData.time) {
       newErrors.end_time = 'La hora de fin debe ser posterior a la hora de inicio';
     }
 
+    // Validar email con regex más estricto
     if (!formData.email.trim()) {
       newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El email no es válido';
+    } else {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'El email no tiene un formato válido';
+      }
     }
 
+    // Validar teléfono con regex
     if (!formData.phone.trim()) {
       newErrors.phone = 'El teléfono es requerido';
-    } else if (formData.phone.length < 10) {
-      newErrors.phone = 'El teléfono debe tener al menos 10 dígitos';
+    } else {
+      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+      const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, '');
+      if (!phoneRegex.test(cleanPhone) || cleanPhone.length < 10) {
+        newErrors.phone = 'El teléfono debe tener un formato válido (mínimo 10 dígitos)';
+      }
+    }
+
+    // Validar descripción (opcional pero con límite)
+    if (formData.description && formData.description.length > 500) {
+      newErrors.description = 'La descripción no puede exceder 500 caracteres';
+    }
+
+    // Validar ubicación (opcional pero con límite)
+    if (formData.location && formData.location.length > 100) {
+      newErrors.location = 'La ubicación no puede exceder 100 caracteres';
     }
 
     setErrors(newErrors);

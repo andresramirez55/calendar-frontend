@@ -102,10 +102,12 @@ export const EventProvider = ({ children }) => {
     setView: (view) => dispatch({ type: ActionTypes.SET_VIEW, payload: view }),
   };
 
-  // Funciones de API con useCallback para optimización
+  // Funciones de API con useCallback para optimización y mejor manejo de errores
   const fetchEvents = useCallback(async () => {
     try {
       actions.setLoading(true);
+      actions.clearError();
+      
       const response = await eventService.getAllEvents();
       
       // Asegurar que la respuesta sea un array
@@ -121,31 +123,61 @@ export const EventProvider = ({ children }) => {
         events = [];
       }
       
-      actions.setEvents(events);
+      // Validar que los eventos tengan la estructura correcta
+      const validEvents = events.filter(event => {
+        return event && 
+               typeof event === 'object' && 
+               event.id && 
+               event.title && 
+               event.date;
+      });
+      
+      if (validEvents.length !== events.length) {
+        console.warn('Some events were filtered out due to invalid structure');
+      }
+      
+      actions.setEvents(validEvents);
       actions.setLoading(false);
     } catch (error) {
       console.error('Error fetching events:', error);
-      actions.setError(`Error de conexión: ${error.message}. El backend puede estar desplegándose.`);
       
-      // Datos de demostración temporal
-      const demoEvents = [
-        {
-          id: 1,
-          title: "Evento de demostración",
-          description: "Este es un evento de ejemplo",
-          date: "2025-09-25T10:00:00Z",
-          time: "10:00",
-          location: "Oficina",
-          email: "demo@example.com",
-          phone: "123-456-7890",
-          is_all_day: false,
-          color: "#3b82f6",
-          priority: "medium",
-          category: "Trabajo"
-        }
-      ];
+      // Determinar el tipo de error y mostrar mensaje apropiado
+      let errorMessage = 'Error desconocido al cargar eventos';
       
-      actions.setEvents(demoEvents);
+      if (error.code === 'NETWORK_ERROR' || !navigator.onLine) {
+        errorMessage = 'Sin conexión a internet. Verifica tu conexión y vuelve a intentar.';
+      } else if (error.response?.status === 404) {
+        errorMessage = 'El servicio no está disponible. Intenta más tarde.';
+      } else if (error.response?.status >= 500) {
+        errorMessage = 'Error del servidor. Nuestro equipo está trabajando para solucionarlo.';
+      } else if (error.message) {
+        errorMessage = `Error: ${error.message}`;
+      }
+      
+      actions.setError(errorMessage);
+      
+      // Datos de demostración temporal solo si es un error de conexión
+      if (error.code === 'NETWORK_ERROR' || error.response?.status >= 500) {
+        const demoEvents = [
+          {
+            id: 1,
+            title: "Evento de demostración",
+            description: "Este es un evento de ejemplo",
+            date: "2025-09-25T10:00:00Z",
+            time: "10:00",
+            location: "Oficina",
+            email: "demo@example.com",
+            phone: "123-456-7890",
+            is_all_day: false,
+            color: "#3b82f6",
+            priority: "medium",
+            category: "Trabajo"
+          }
+        ];
+        
+        actions.setEvents(demoEvents);
+      }
+      
       actions.setLoading(false);
     }
   }, [actions]);
