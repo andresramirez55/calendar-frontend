@@ -8,48 +8,27 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen">
-      {/* Modern Header */}
-      <header className="bg-white/90 backdrop-blur-lg border-b border-white/20 shadow-lg">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <span className="text-white text-xl font-bold">📅</span>
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Calendar App
-              </h1>
-            </div>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex space-x-4">
-              <a href="#" className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/80">
-                Calendario
-              </a>
-              <a href="#" className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60">
-                Eventos
-              </a>
-              <a href="#" className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60">
-                Estadísticas
-              </a>
-              <button
-                onClick={() => setShowFamilySettings(true)}
-                className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60 flex items-center gap-2"
-              >
-                👨‍👩‍👧‍👦 Familia
-              </button>
-            </nav>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button className="text-gray-700 hover:text-blue-600 p-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
+      {/* Clean Header */}
+      <header className="header">
+        <div className="header-content">
+          {/* Logo */}
+          <div className="logo">
+            <div className="logo-icon">📅</div>
+            <div className="logo-text">Calendar App</div>
           </div>
+
+          {/* Navigation */}
+          <nav className="nav">
+            <a href="#" className="nav-item active">Calendario</a>
+            <a href="#" className="nav-item">Eventos</a>
+            <a href="#" className="nav-item">Estadísticas</a>
+            <button
+              onClick={() => setShowFamilySettings(true)}
+              className="nav-item"
+            >
+              👨‍👩‍👧‍👦 Familia
+            </button>
+          </nav>
         </div>
       </header>
 
