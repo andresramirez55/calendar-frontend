@@ -123,6 +123,15 @@ const SimpleEventForm = ({ event, onClose }) => {
         formattedDate = new Date().toISOString().split('T')[0];
       }
 
+      // Preparar datos familiares para el backend
+      const familyData = {
+        notify_family: formData.notify_family,
+        notify_papa: formData.notify_papa,
+        notify_mama: formData.notify_mama,
+        selected_children: JSON.stringify(formData.selected_children || []),
+        family_members: JSON.stringify(familyConfig?.familyMembers || [])
+      };
+
       const eventData = {
         title: formData.title,
         date: formattedDate, // Formato YYYY-MM-DD para el backend
@@ -135,10 +144,14 @@ const SimpleEventForm = ({ event, onClose }) => {
         is_all_day: false, // Cambiado a false para que funcione con el backend
         category: 'personal', // Categoría por defecto
         priority: 'medium', // Prioridad por defecto
-        color: '#007AFF' // Color por defecto
+        color: '#007AFF', // Color por defecto
+        // Datos familiares
+        ...familyData
       };
 
-      console.log('Enviando datos:', eventData);
+      console.log('🔍 Enviando datos al backend:', eventData);
+      console.log('🔍 Datos familiares:', familyData);
+      console.log('🔍 Configuración familiar:', familyConfig);
 
       if (event) {
         // Actualizar evento existente
