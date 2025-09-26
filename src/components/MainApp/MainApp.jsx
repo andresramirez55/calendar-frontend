@@ -138,48 +138,46 @@ const MainApp = () => {
 
   return (
     <div className="main">
-        <div className="space-y-6">
-          {/* Toggle de vista */}
-          <div className="flex justify-center">
-            <ViewToggle
-              currentView={currentView}
-              onViewChange={setCurrentView}
-            />
-          </div>
-
-          {/* Filtros de búsqueda (solo para vista de lista) */}
-          {currentView === 'list' && (
-            <SearchFilters
-              onSearch={handleSearch}
-            />
-          )}
-
-          {/* Botón de nuevo evento (solo para vista de lista) */}
-          {currentView === 'list' && (
-            <div className="flex justify-end">
-              <button
-                onClick={handleCreateEvent}
-                className="btn-primary"
-              >
-                ➕ Nuevo Evento
-              </button>
-            </div>
-          )}
-
-          {/* Contenido principal */}
-          <div className="w-full">
-            {renderContent()}
-          </div>
+      <div className="space-y-6">
+        {/* Toggle de vista */}
+        <div className="flex justify-center">
+          <ViewToggle
+            currentView={currentView}
+            onViewChange={setCurrentView}
+          />
         </div>
 
-        {/* Formulario de evento */}
-        {showEventForm && (
-          <EventForm
-            event={editingEvent}
-            onClose={handleCloseForm}
+        {/* Botón de nuevo evento - siempre visible */}
+        <div className="flex justify-end">
+          <button
+            onClick={handleCreateEvent}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg"
+          >
+            ➕ Nuevo Evento
+          </button>
+        </div>
+
+        {/* Filtros de búsqueda (solo para vista de lista) */}
+        {currentView === 'list' && (
+          <SearchFilters
+            onSearch={handleSearch}
           />
         )}
+
+        {/* Contenido principal */}
+        <div className="w-full">
+          {renderContent()}
+        </div>
       </div>
+
+      {/* Formulario de evento */}
+      {showEventForm && (
+        <EventForm
+          event={editingEvent}
+          onClose={handleCloseForm}
+        />
+      )}
+    </div>
   );
 };
 
