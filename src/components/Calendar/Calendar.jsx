@@ -295,12 +295,11 @@ const Calendar = () => {
                     )
                   }}
                 />
-        </div>
       </div>
 
       {/* Formulario de evento */}
       {showEventForm && (
-        <SimpleEventForm
+        <EventForm
           event={editingEvent}
           onClose={handleCloseForm}
         />
