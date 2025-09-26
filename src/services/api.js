@@ -28,35 +28,35 @@ const api = axios.create({
   },
 });
 
-// Interceptor simplificado para manejar errores
-api.interceptors.response.use(
-  (response) => {
-    // Solo verificar HTML en respuestas exitosas si es realmente HTML
-    if (response.data && typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
-      console.warn('Backend returned HTML instead of JSON, backend may be down');
-      throw new Error('BACKEND_NOT_AVAILABLE');
-    }
-    return response;
-  },
-  (error) => {
-    console.error('API Error:', error);
+// Interceptor temporalmente deshabilitado para debug
+// api.interceptors.response.use(
+//   (response) => {
+//     // Solo verificar HTML en respuestas exitosas si es realmente HTML
+//     if (response.data && typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+//       console.warn('Backend returned HTML instead of JSON, backend may be down');
+//       throw new Error('BACKEND_NOT_AVAILABLE');
+//     }
+//     return response;
+//   },
+//   (error) => {
+//     console.error('API Error:', error);
     
-    // Solo manejar errores de red reales
-    if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
-      console.warn('Network error, backend may be down');
-      throw new Error('BACKEND_NOT_AVAILABLE');
-    }
+//     // Solo manejar errores de red reales
+//     if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
+//       console.warn('Network error, backend may be down');
+//       throw new Error('BACKEND_NOT_AVAILABLE');
+//     }
     
-    // Solo manejar 404 si es realmente un error de aplicación
-    if (error.response && error.response.status === 404 && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('Application not found')) {
-      console.warn('Backend application not found');
-      throw new Error('BACKEND_NOT_AVAILABLE');
-    }
+//     // Solo manejar 404 si es realmente un error de aplicación
+//     if (error.response && error.response.status === 404 && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('Application not found')) {
+//       console.warn('Backend application not found');
+//       throw new Error('BACKEND_NOT_AVAILABLE');
+//     }
     
-    // Pasar otros errores normalmente
-    return Promise.reject(error);
-  }
-);
+//     // Pasar otros errores normalmente
+//     return Promise.reject(error);
+//   }
+// );
 
 // Servicios de eventos
 export const eventService = {

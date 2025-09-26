@@ -239,45 +239,45 @@ export const EventProvider = ({ children }) => {
   }, [actions]);
 
   const createEvent = useCallback(async (eventData) => {
+    // Validar datos antes de enviar
+    if (!eventData.title || !eventData.date) {
+      throw new Error('Título y fecha son requeridos');
+    }
+    
+    // Asegurar que la fecha tenga el formato correcto para el backend
+    let formattedDate = eventData.date;
+    if (formattedDate) {
+      // Si viene en formato ISO, extraer solo la fecha
+      if (formattedDate.includes('T')) {
+        formattedDate = formattedDate.split('T')[0];
+      }
+      // Si viene en formato Date, convertir a YYYY-MM-DD
+      if (formattedDate instanceof Date) {
+        formattedDate = formattedDate.toISOString().split('T')[0];
+      }
+    } else {
+      formattedDate = new Date().toISOString().split('T')[0];
+    }
+
+    const validatedEventData = {
+      ...eventData,
+      date: formattedDate, // Formato YYYY-MM-DD para el backend
+      time: eventData.time || '00:00',
+      title: eventData.title.trim(),
+      description: eventData.description?.trim() || '',
+      location: eventData.location?.trim() || '',
+      email: eventData.email?.trim() || '',
+      phone: eventData.phone?.trim() || '',
+      category: eventData.category || 'other',
+      priority: eventData.priority || 'medium',
+      reminder_day: Boolean(eventData.reminder_day),
+      reminder_day_before: Boolean(eventData.reminder_day_before),
+      is_all_day: Boolean(eventData.is_all_day),
+      color: eventData.color || '#007AFF'
+    };
+
     try {
       actions.setLoading(true);
-      
-      // Validar datos antes de enviar
-      if (!eventData.title || !eventData.date) {
-        throw new Error('Título y fecha son requeridos');
-      }
-      
-      // Asegurar que la fecha tenga el formato correcto para el backend
-      let formattedDate = eventData.date;
-      if (formattedDate) {
-        // Si viene en formato ISO, extraer solo la fecha
-        if (formattedDate.includes('T')) {
-          formattedDate = formattedDate.split('T')[0];
-        }
-        // Si viene en formato Date, convertir a YYYY-MM-DD
-        if (formattedDate instanceof Date) {
-          formattedDate = formattedDate.toISOString().split('T')[0];
-        }
-      } else {
-        formattedDate = new Date().toISOString().split('T')[0];
-      }
-
-      const validatedEventData = {
-        ...eventData,
-        date: formattedDate, // Formato YYYY-MM-DD para el backend
-        time: eventData.time || '00:00',
-        title: eventData.title.trim(),
-        description: eventData.description?.trim() || '',
-        location: eventData.location?.trim() || '',
-        email: eventData.email?.trim() || '',
-        phone: eventData.phone?.trim() || '',
-        category: eventData.category || 'other',
-        priority: eventData.priority || 'medium',
-        reminder_day: Boolean(eventData.reminder_day),
-        reminder_day_before: Boolean(eventData.reminder_day_before),
-        is_all_day: Boolean(eventData.is_all_day),
-        color: eventData.color || '#007AFF'
-      };
       
       const response = await eventService.createEvent(validatedEventData);
       
