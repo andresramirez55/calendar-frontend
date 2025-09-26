@@ -20,7 +20,7 @@ const Calendar = () => {
 
   // Calendar state management
 
-  // Convertir eventos al formato del calendario
+  // Convertir eventos al formato del calendario con validación robusta
   const calendarEvents = useMemo(() => {
     // Asegurar que events sea un array
     if (!Array.isArray(events)) {
@@ -28,30 +28,68 @@ const Calendar = () => {
       return [];
     }
     
-    return events.map(event => {
-      // Extraer solo la fecha (sin la parte de tiempo)
-      const dateOnly = event.date.split('T')[0];
-      
-      let startDate, endDate;
-      
-      if (event.is_all_day || !event.time) {
-        // Evento de todo el día
-        startDate = new Date(`${dateOnly}T00:00:00`);
-        endDate = new Date(`${dateOnly}T23:59:59`);
-      } else {
-        // Evento con hora específica
-        startDate = new Date(`${dateOnly}T${event.time}:00`);
-        endDate = new Date(`${dateOnly}T${event.end_time || event.time}:00`);
-      }
-      
-      return {
-        id: event.id,
-        title: event.title,
-        start: startDate,
-        end: endDate,
-        resource: event,
-      };
-    });
+    return events
+      .filter(event => {
+        // Validar que el evento tenga las propiedades necesarias
+        return event && 
+               typeof event === 'object' && 
+               event.id && 
+               event.title && 
+               event.date &&
+               typeof event.date === 'string' &&
+               event.date.trim() !== '';
+      })
+      .map(event => {
+        try {
+          // Validar y limpiar la fecha
+          let dateOnly;
+          if (event.date.includes('T')) {
+            dateOnly = event.date.split('T')[0];
+          } else {
+            dateOnly = event.date;
+          }
+          
+          // Validar que la fecha sea válida
+          const testDate = new Date(dateOnly);
+          if (isNaN(testDate.getTime())) {
+            console.warn('Invalid date for event:', event.id, event.date);
+            return null;
+          }
+          
+          let startDate, endDate;
+          
+          if (event.is_all_day || !event.time) {
+            // Evento de todo el día
+            startDate = new Date(`${dateOnly}T00:00:00`);
+            endDate = new Date(`${dateOnly}T23:59:59`);
+          } else {
+            // Evento con hora específica
+            const time = event.time || '00:00';
+            const endTime = event.end_time || time;
+            
+            startDate = new Date(`${dateOnly}T${time}:00`);
+            endDate = new Date(`${dateOnly}T${endTime}:00`);
+          }
+          
+          // Validar que las fechas sean válidas
+          if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            console.warn('Invalid start/end date for event:', event.id);
+            return null;
+          }
+          
+          return {
+            id: event.id,
+            title: event.title || 'Sin título',
+            start: startDate,
+            end: endDate,
+            resource: event,
+          };
+        } catch (error) {
+          console.error('Error processing event:', event.id, error);
+          return null;
+        }
+      })
+      .filter(event => event !== null); // Filtrar eventos nulos
   }, [events]);
 
   // Manejar selección de evento

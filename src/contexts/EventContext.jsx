@@ -129,7 +129,9 @@ export const EventProvider = ({ children }) => {
                typeof event === 'object' && 
                event.id && 
                event.title && 
-               event.date;
+               event.date &&
+               typeof event.date === 'string' &&
+               event.date.trim() !== '';
       });
       
       if (validEvents.length !== events.length) {
@@ -185,7 +187,30 @@ export const EventProvider = ({ children }) => {
   const createEvent = useCallback(async (eventData) => {
     try {
       actions.setLoading(true);
-      const response = await eventService.createEvent(eventData);
+      
+      // Validar datos antes de enviar
+      if (!eventData.title || !eventData.date) {
+        throw new Error('Título y fecha son requeridos');
+      }
+      
+      // Asegurar que la fecha tenga el formato correcto
+      const validatedEventData = {
+        ...eventData,
+        date: eventData.date || new Date().toISOString(),
+        time: eventData.time || '00:00',
+        end_time: eventData.end_time || eventData.time || '00:00',
+        title: eventData.title.trim(),
+        description: eventData.description?.trim() || '',
+        location: eventData.location?.trim() || '',
+        email: eventData.email?.trim() || '',
+        phone: eventData.phone?.trim() || '',
+        category: eventData.category || 'other',
+        priority: eventData.priority || 'medium',
+        reminder_day: Boolean(eventData.reminder_day),
+        reminder_day_before: Boolean(eventData.reminder_day_before)
+      };
+      
+      const response = await eventService.createEvent(validatedEventData);
       
       // Manejar diferentes estructuras de respuesta
       let event;
@@ -200,16 +225,20 @@ export const EventProvider = ({ children }) => {
         event = response;
       }
       
-      actions.addEvent(event);
-      
-      // Agregar recordatorios si están habilitados (con verificación segura)
-      if (event && typeof event === 'object') {
+      // Validar que el evento tenga la estructura correcta antes de agregarlo
+      if (event && typeof event === 'object' && event.id && event.title && event.date) {
+        actions.addEvent(event);
+        
+        // Agregar recordatorios si están habilitados (con verificación segura)
         if (event.reminder_day) {
           reminderService.addReminder(event, 'day');
         }
         if (event.reminder_day_before) {
           reminderService.addReminder(event, 'day_before');
         }
+      } else {
+        console.error('Invalid event structure received:', event);
+        throw new Error('Estructura de evento inválida recibida del servidor');
       }
       
       actions.setLoading(false);

@@ -156,14 +156,35 @@ const EventForm = ({ event, onClose }) => {
     }
 
     try {
+      // Asegurar que los datos tengan el formato correcto
+      const eventData = {
+        ...formData,
+        title: formData.title.trim(),
+        description: formData.description?.trim() || '',
+        location: formData.location?.trim() || '',
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        // Asegurar que la fecha tenga el formato correcto
+        date: formData.date ? `${formData.date}T00:00:00Z` : new Date().toISOString(),
+        time: formData.time || '00:00',
+        end_time: formData.end_time || formData.time || '00:00',
+        // Valores por defecto para campos opcionales
+        category: formData.category || 'other',
+        priority: formData.priority || 'medium',
+        reminder_day: Boolean(formData.reminder_day),
+        reminder_day_before: Boolean(formData.reminder_day_before)
+      };
+
       if (event) {
-        await updateEvent(event.id, formData);
+        await updateEvent(event.id, eventData);
       } else {
-        await createEvent(formData);
+        await createEvent(eventData);
       }
       onClose();
     } catch (error) {
       console.error('Error al guardar evento:', error);
+      // Mostrar mensaje de error al usuario
+      alert(`Error al guardar el evento: ${error.message || 'Error desconocido'}`);
     }
   };
 
