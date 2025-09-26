@@ -4,7 +4,7 @@ import { useEvents } from '../../contexts/EventContext';
 
 const SimpleEventForm = ({ event, onClose }) => {
   const { createEvent, updateEvent } = useEvents();
-  // Force update - mobile optimized form - v2
+  // Force update - mobile optimized form - v3 - $(Date.now())
   const [formData, setFormData] = useState({
     title: '',
     description: '',
