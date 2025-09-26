@@ -130,9 +130,9 @@ const SimpleEventForm = ({ event, onClose }) => {
         }}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {event ? 'Editar Evento' : 'Nuevo Evento'}
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-red-500">
+          <h2 className="text-xl font-semibold text-white">
+            🔴 PRUEBA - {event ? 'Editar Evento' : 'Nuevo Evento'} - MOBILE OPTIMIZADO
           </h2>
           <button
             onClick={onClose}
@@ -146,15 +146,15 @@ const SimpleEventForm = ({ event, onClose }) => {
         <form onSubmit={handleSubmit} className="p-4 sm:p-6">
           <div className="space-y-6">
             {/* Título */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">Título *</label>
+            <div className="bg-yellow-200 p-4 rounded-lg">
+              <label className="block text-lg font-bold text-red-700 mb-3">🟡 TÍTULO MOBILE OPTIMIZADO *</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                placeholder="Título del evento"
+                className="w-full px-6 py-4 border-4 border-blue-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xl bg-green-100"
+                placeholder="🔥 Este input debería ser MÁS GRANDE para móvil"
                 required
               />
             </div>
