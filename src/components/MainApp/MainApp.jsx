@@ -171,16 +171,15 @@ const MainApp = () => {
             {renderContent()}
           </div>
         </div>
-      </div>
 
-      {/* Formulario de evento */}
-      {showEventForm && (
-        <EventForm
-          event={editingEvent}
-          onClose={handleCloseForm}
-        />
-      )}
-    </div>
+        {/* Formulario de evento */}
+        {showEventForm && (
+          <EventForm
+            event={editingEvent}
+            onClose={handleCloseForm}
+          />
+        )}
+      </div>
   );
 };
 
