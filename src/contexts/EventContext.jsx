@@ -341,11 +341,34 @@ export const EventProvider = ({ children }) => {
     } catch (error) {
       console.error('Error creating event:', error);
       
-      // Manejar errores específicos del backend
-      let errorMessage = 'Error al crear evento';
+      // Si el backend no está disponible, crear evento en modo demo
       if (error.message.includes('BACKEND_NOT_AVAILABLE')) {
-        errorMessage = 'Backend no disponible, usando modo demostración';
-      } else if (error.message.includes('validation')) {
+        console.warn('Backend not available, creating demo event');
+        const demoEvent = {
+          id: Date.now(),
+          title: validatedEventData.title,
+          date: validatedEventData.date,
+          time: validatedEventData.time,
+          location: validatedEventData.location,
+          email: validatedEventData.email,
+          phone: validatedEventData.phone,
+          description: validatedEventData.description,
+          category: validatedEventData.category,
+          priority: validatedEventData.priority,
+          reminder_day: validatedEventData.reminder_day,
+          reminder_day_before: validatedEventData.reminder_day_before,
+          is_all_day: validatedEventData.is_all_day,
+          color: validatedEventData.color,
+          is_demo: true
+        };
+        actions.addEvent(demoEvent);
+        actions.setLoading(false);
+        return { event: demoEvent, is_demo: true };
+      }
+      
+      // Manejar otros errores
+      let errorMessage = 'Error al crear evento';
+      if (error.message.includes('validation')) {
         errorMessage = 'Error de validación: ' + error.message;
       } else if (error.message.includes('required')) {
         errorMessage = 'Campos requeridos faltantes: ' + error.message;
