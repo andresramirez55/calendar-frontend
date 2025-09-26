@@ -346,19 +346,19 @@ export const EventProvider = ({ children }) => {
         console.warn('Backend not available, creating demo event');
         const demoEvent = {
           id: Date.now(),
-          title: validatedEventData.title,
-          date: validatedEventData.date,
-          time: validatedEventData.time,
-          location: validatedEventData.location,
-          email: validatedEventData.email,
-          phone: validatedEventData.phone,
-          description: validatedEventData.description,
-          category: validatedEventData.category,
-          priority: validatedEventData.priority,
-          reminder_day: validatedEventData.reminder_day,
-          reminder_day_before: validatedEventData.reminder_day_before,
-          is_all_day: validatedEventData.is_all_day,
-          color: validatedEventData.color,
+          title: validatedEventData?.title || eventData.title,
+          date: validatedEventData?.date || eventData.date,
+          time: validatedEventData?.time || eventData.time || '00:00',
+          location: validatedEventData?.location || eventData.location || '',
+          email: validatedEventData?.email || eventData.email || 'demo@ejemplo.com',
+          phone: validatedEventData?.phone || eventData.phone || '1234567890',
+          description: validatedEventData?.description || eventData.description || '',
+          category: validatedEventData?.category || eventData.category || 'personal',
+          priority: validatedEventData?.priority || eventData.priority || 'medium',
+          reminder_day: validatedEventData?.reminder_day || eventData.reminder_day || true,
+          reminder_day_before: validatedEventData?.reminder_day_before || eventData.reminder_day_before || true,
+          is_all_day: validatedEventData?.is_all_day || eventData.is_all_day || true,
+          color: validatedEventData?.color || eventData.color || '#007AFF',
           is_demo: true
         };
         actions.addEvent(demoEvent);
