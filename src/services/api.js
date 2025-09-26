@@ -12,11 +12,8 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // Por defecto, usar el backend en Railway (temporalmente deshabilitado)
-  // return 'https://calendar-backend-production.up.railway.app';
-  
-  // Usar localhost temporalmente hasta que Railway funcione
-  return 'http://localhost:8080';
+  // En producción, usar el backend en Railway
+  return 'https://calendar-backend-production.up.railway.app';
 };
 
 // Log para debug
@@ -31,15 +28,28 @@ const api = axios.create({
   },
 });
 
-// Interceptor simplificado para manejar errores
+// Interceptor para manejar errores y respuestas HTML
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Verificar si la respuesta es HTML (indica que el backend no está funcionando)
+    if (response.data && typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+      console.warn('Backend returned HTML instead of JSON, backend may be down');
+      throw new Error('BACKEND_NOT_AVAILABLE');
+    }
+    return response;
+  },
   (error) => {
     console.error('API Error:', error);
     
     // Si es un error de red, mostrar mensaje más claro
     if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
       console.warn('Backend not available, using demo mode');
+      throw new Error('BACKEND_NOT_AVAILABLE');
+    }
+    
+    // Si la respuesta es HTML, el backend no está funcionando
+    if (error.response && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('<!doctype html>')) {
+      console.warn('Backend returned HTML, backend may be down');
       throw new Error('BACKEND_NOT_AVAILABLE');
     }
     

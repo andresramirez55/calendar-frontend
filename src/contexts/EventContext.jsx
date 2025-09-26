@@ -307,6 +307,32 @@ export const EventProvider = ({ children }) => {
         }
       } else {
         console.error('Invalid event structure received:', event);
+        
+        // Verificar si la respuesta es HTML (backend no disponible)
+        if (typeof event === 'string' && event.includes('<!doctype html>')) {
+          console.warn('Backend returned HTML, using demo mode');
+          // Crear un evento demo temporal
+          const demoEvent = {
+            id: Date.now(),
+            title: validatedEventData.title,
+            date: validatedEventData.date,
+            time: validatedEventData.time,
+            location: validatedEventData.location,
+            email: validatedEventData.email,
+            phone: validatedEventData.phone,
+            description: validatedEventData.description,
+            category: validatedEventData.category,
+            priority: validatedEventData.priority,
+            reminder_day: validatedEventData.reminder_day,
+            reminder_day_before: validatedEventData.reminder_day_before,
+            is_all_day: validatedEventData.is_all_day,
+            color: validatedEventData.color,
+            is_demo: true
+          };
+          actions.addEvent(demoEvent);
+          return { event: demoEvent, is_demo: true };
+        }
+        
         throw new Error('Estructura de evento inválida recibida del servidor');
       }
       
