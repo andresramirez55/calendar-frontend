@@ -56,10 +56,35 @@ const SimpleEventForm = ({ event, onClose }) => {
     setLoading(true);
 
     try {
+      // Validar campos requeridos
+      if (!formData.title || !formData.date || !formData.time) {
+        alert('Por favor completa todos los campos requeridos');
+        setLoading(false);
+        return;
+      }
+
+      // Validar email si se proporciona
+      if (formData.email && !formData.email.includes('@')) {
+        alert('Por favor ingresa un email válido');
+        setLoading(false);
+        return;
+      }
+
+      // Validar teléfono si se proporciona
+      if (formData.phone && formData.phone.length < 10) {
+        alert('El teléfono debe tener al menos 10 caracteres');
+        setLoading(false);
+        return;
+      }
+
       const eventData = {
         ...formData,
-        date: formData.date // Usar formato YYYY-MM-DD directamente
+        date: formData.date, // Usar formato YYYY-MM-DD directamente
+        email: formData.email || 'demo@ejemplo.com', // Email por defecto
+        phone: formData.phone || '1234567890' // Teléfono por defecto
       };
+
+      console.log('Enviando datos:', eventData);
 
       if (event) {
         // Actualizar evento existente
