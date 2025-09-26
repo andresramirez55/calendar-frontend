@@ -116,23 +116,30 @@ const SimpleEventForm = ({ event, onClose }) => {
         zIndex: 9999,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backdropFilter: 'blur(4px)'
       }}
+      onClick={onClose}
     >
       <div 
         className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] overflow-auto mx-4" 
         style={{ 
-          position: 'relative', 
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
           zIndex: 10000,
           backgroundColor: 'white',
           borderRadius: '12px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          pointerEvents: 'auto'
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-red-500">
-          <h2 className="text-xl font-semibold text-white">
-            🔴 PRUEBA - {event ? 'Editar Evento' : 'Nuevo Evento'} - MOBILE OPTIMIZADO
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white">
+          <h2 className="text-xl font-semibold text-gray-900">
+            {event ? 'Editar Evento' : 'Nuevo Evento'}
           </h2>
           <button
             onClick={onClose}
@@ -146,15 +153,15 @@ const SimpleEventForm = ({ event, onClose }) => {
         <form onSubmit={handleSubmit} className="p-4 sm:p-6">
           <div className="space-y-6">
             {/* Título */}
-            <div className="bg-yellow-200 p-4 rounded-lg">
-              <label className="block text-lg font-bold text-red-700 mb-3">🟡 TÍTULO MOBILE OPTIMIZADO *</label>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Título *</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-6 py-4 border-4 border-blue-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xl bg-green-100"
-                placeholder="🔥 Este input debería ser MÁS GRANDE para móvil"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white"
+                placeholder="Título del evento"
                 required
               />
             </div>

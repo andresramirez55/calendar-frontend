@@ -147,15 +147,17 @@ const MainApp = () => {
           />
         </div>
 
-        {/* Botón de nuevo evento - siempre visible */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleCreateEvent}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg"
-          >
-            ➕ Nuevo Evento
-          </button>
-        </div>
+        {/* Botón de nuevo evento - solo en vista calendario */}
+        {currentView === 'calendar' && (
+          <div className="flex justify-end">
+            <button
+              onClick={handleCreateEvent}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg"
+            >
+              ➕ Nuevo Evento
+            </button>
+          </div>
+        )}
 
         {/* Filtros de búsqueda (solo para vista de lista) */}
         {currentView === 'list' && (
