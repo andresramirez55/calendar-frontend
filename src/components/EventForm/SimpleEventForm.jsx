@@ -83,12 +83,13 @@ const SimpleEventForm = ({ event, onClose }) => {
       const eventData = {
         title: formData.title,
         date: formattedDate, // Formato YYYY-MM-DD para el backend
+        time: '10:00', // Hora requerida por el backend
         location: formData.location || '',
-        reminder_day: formData.reminder_day,
-        reminder_day_before: formData.reminder_day_before,
-        is_all_day: true, // Todos los eventos son de todo el día
         email: 'demo@ejemplo.com', // Email por defecto
         phone: '1234567890', // Teléfono por defecto
+        reminder_day: formData.reminder_day,
+        reminder_day_before: formData.reminder_day_before,
+        is_all_day: false, // Cambiado a false para que funcione con el backend
         category: 'personal', // Categoría por defecto
         priority: 'medium', // Prioridad por defecto
         color: '#007AFF' // Color por defecto

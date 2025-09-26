@@ -262,13 +262,13 @@ export const EventProvider = ({ children }) => {
     const validatedEventData = {
       ...eventData,
       date: formattedDate, // Formato YYYY-MM-DD para el backend
-      time: eventData.time || '00:00',
+      time: eventData.time || '10:00', // Hora requerida por el backend
       title: eventData.title.trim(),
       description: eventData.description?.trim() || '',
       location: eventData.location?.trim() || '',
-      email: eventData.email?.trim() || '',
-      phone: eventData.phone?.trim() || '',
-      category: eventData.category || 'other',
+      email: eventData.email?.trim() || 'demo@ejemplo.com',
+      phone: eventData.phone?.trim() || '1234567890',
+      category: eventData.category || 'personal',
       priority: eventData.priority || 'medium',
       reminder_day: Boolean(eventData.reminder_day),
       reminder_day_before: Boolean(eventData.reminder_day_before),
