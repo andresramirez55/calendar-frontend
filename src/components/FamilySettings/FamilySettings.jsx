@@ -31,14 +31,17 @@ const FamilySettings = ({ onClose }) => {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[70vh] overflow-hidden"
+        className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden"
         style={{
           position: 'relative',
           zIndex: 100000,
           backgroundColor: 'white',
           borderRadius: '12px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          maxWidth: '500px',
+          width: '90%',
+          maxHeight: '80vh'
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -58,24 +61,24 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Contenido */}
-        <div className="px-6 py-4 max-h-[50vh] overflow-y-auto space-y-6">
+        <div className="px-6 py-4 max-h-[60vh] overflow-y-auto space-y-4">
           {/* Miembros de la familia */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4">👨‍👩‍👧‍👦 Miembros de la familia</h4>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {familyMembers.map((member, index) => (
-                <div key={member.id} className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 font-semibold">
+                <div key={member.id} className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 font-semibold text-sm">
                         {member.name.charAt(0)}
                       </span>
                     </div>
-                    <h5 className="font-medium text-gray-900">Padre {index + 1}</h5>
+                    <h5 className="font-medium text-gray-900 text-sm">Padre {index + 1}</h5>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Nombre completo</label>
                       <input
                         type="text"
                         value={member.name}
@@ -84,12 +87,12 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].name = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Ej: Juan Pérez"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
                       <input
                         type="email"
                         value={member.email}
@@ -98,12 +101,12 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].email = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="juan@ejemplo.com"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
                       <input
                         type="tel"
                         value={member.phone}
@@ -112,7 +115,7 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].phone = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="+1 234 567 8900"
                       />
                     </div>
@@ -124,14 +127,14 @@ const FamilySettings = ({ onClose }) => {
 
           {/* Niñas */}
           <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">👧 Niñas</h4>
-            <div className="space-y-3">
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">👧 Niñas</h4>
+            <div className="space-y-2">
               {kids.map((kid, index) => (
-                <div key={index} className="p-3 bg-pink-50 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">👧</span>
+                <div key={index} className="p-2 bg-pink-50 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">👧</span>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Niña {index + 1}</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Niña {index + 1}</label>
                       <input
                         type="text"
                         value={kid}
@@ -140,7 +143,7 @@ const FamilySettings = ({ onClose }) => {
                           updated[index] = e.target.value;
                           setKids(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                         placeholder="Ej: María"
                       />
                     </div>
@@ -149,7 +152,7 @@ const FamilySettings = ({ onClose }) => {
                         const updated = kids.filter((_, i) => i !== index);
                         setKids(updated);
                       }}
-                      className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100"
+                      className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100"
                     >
                       ✕
                     </button>
@@ -158,7 +161,7 @@ const FamilySettings = ({ onClose }) => {
               ))}
               <button
                 onClick={() => setKids([...kids, ''])}
-                className="w-full py-3 border-2 border-dashed border-pink-300 rounded-lg text-pink-500 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50 transition-colors"
+                className="w-full py-2 border-2 border-dashed border-pink-300 rounded-lg text-pink-500 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50 transition-colors text-sm"
               >
                 + Agregar niña
               </button>
