@@ -39,6 +39,8 @@ const SimpleEventForm = ({ event, onClose }) => {
       try {
         const config = JSON.parse(savedConfig);
         console.log('✅ Family config loaded:', config);
+        console.log('🔍 Family members:', config.familyMembers);
+        console.log('🔍 Kids:', config.kids);
         setFamilyConfig(config);
         setFormData(prev => ({
           ...prev,
@@ -81,10 +83,16 @@ const SimpleEventForm = ({ event, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    console.log('🔍 Form change:', { name, value, type, checked });
+    
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      };
+      console.log('🔍 New form data:', newData);
+      return newData;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -307,8 +315,16 @@ const SimpleEventForm = ({ event, onClose }) => {
                   </div>
                 )}
 
-                {/* Selector de hijos (múltiple) */}
-                {formData.notify_family && familyConfig.kids && familyConfig.kids.length > 0 && (
+            {/* Selector de hijos (múltiple) */}
+            {(() => {
+              console.log('🔍 Checking kids for display:', {
+                notify_family: formData.notify_family,
+                familyConfig: familyConfig,
+                kids: familyConfig?.kids,
+                kidsLength: familyConfig?.kids?.length
+              });
+              return formData.notify_family && familyConfig.kids && familyConfig.kids.length > 0;
+            })() && (
                   <div className="mt-3">
                     <label className="block text-sm font-medium text-pink-700 mb-2">
                       👶 ¿Para qué hijo(s) es este evento?
