@@ -341,38 +341,34 @@ export const EventProvider = ({ children }) => {
     } catch (error) {
       console.error('Error creating event:', error);
       
-      // Si el backend no está disponible, crear evento en modo demo
-      if (error.message.includes('BACKEND_NOT_AVAILABLE')) {
-        console.warn('Backend not available, creating demo event');
-        const demoEvent = {
-          id: Date.now(),
-          title: validatedEventData?.title || eventData.title,
-          date: validatedEventData?.date || eventData.date,
-          time: validatedEventData?.time || eventData.time || '00:00',
-          location: validatedEventData?.location || eventData.location || '',
-          email: validatedEventData?.email || eventData.email || 'demo@ejemplo.com',
-          phone: validatedEventData?.phone || eventData.phone || '1234567890',
-          description: validatedEventData?.description || eventData.description || '',
-          category: validatedEventData?.category || eventData.category || 'personal',
-          priority: validatedEventData?.priority || eventData.priority || 'medium',
-          reminder_day: validatedEventData?.reminder_day || eventData.reminder_day || true,
-          reminder_day_before: validatedEventData?.reminder_day_before || eventData.reminder_day_before || true,
-          is_all_day: validatedEventData?.is_all_day || eventData.is_all_day || true,
-          color: validatedEventData?.color || eventData.color || '#007AFF',
-          is_demo: true
-        };
-        actions.addEvent(demoEvent);
-        actions.setLoading(false);
-        return { event: demoEvent, is_demo: true };
-      }
-      
-      // Manejar otros errores
+      // Manejar errores específicos del backend
       let errorMessage = 'Error al crear evento';
-      if (error.message.includes('validation')) {
-        errorMessage = 'Error de validación: ' + error.message;
-      } else if (error.message.includes('required')) {
-        errorMessage = 'Campos requeridos faltantes: ' + error.message;
+      
+      if (error.response) {
+        // Error de respuesta del servidor
+        const status = error.response.status;
+        const data = error.response.data;
+        
+        console.error('Backend error:', status, data);
+        
+        if (status === 400) {
+          // Error de validación
+          if (data && data.error) {
+            errorMessage = `Error del servidor: ${data.error}`;
+          } else {
+            errorMessage = 'Error de validación: Datos incorrectos';
+          }
+        } else if (status === 500) {
+          errorMessage = 'Error interno del servidor';
+        } else {
+          errorMessage = `Error del servidor (${status}): ${data?.error || error.message}`;
+        }
+      } else if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
+        // Error de red
+        console.warn('Network error, backend may be down');
+        errorMessage = 'Error de conexión: Backend no disponible';
       } else {
+        // Otros errores
         errorMessage = `Error al crear evento: ${error.message}`;
       }
       
