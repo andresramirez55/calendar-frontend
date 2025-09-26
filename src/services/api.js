@@ -12,8 +12,11 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // Por defecto, usar el backend en Railway
-  return 'https://calendar-backend-production.up.railway.app';
+  // Por defecto, usar el backend en Railway (temporalmente deshabilitado)
+  // return 'https://calendar-backend-production.up.railway.app';
+  
+  // Usar localhost temporalmente hasta que Railway funcione
+  return 'http://localhost:8080';
 };
 
 // Log para debug
