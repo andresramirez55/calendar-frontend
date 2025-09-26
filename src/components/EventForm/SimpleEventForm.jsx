@@ -119,7 +119,7 @@ const SimpleEventForm = ({ event, onClose }) => {
       }}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto" 
+        className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] overflow-auto mx-4" 
         style={{ 
           position: 'relative', 
           zIndex: 10000,
@@ -142,97 +142,123 @@ const SimpleEventForm = ({ event, onClose }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Columna izquierda */}
-            <div className="space-y-4">
-              {/* Título */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Título *</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Título del evento"
-                  required
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6">
+          <div className="space-y-6">
+            {/* Título */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Título *</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                placeholder="Título del evento"
+                required
+              />
+            </div>
 
-              {/* Descripción */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Descripción del evento"
-                  rows={3}
-                />
-              </div>
+            {/* Descripción */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Descripción</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                placeholder="Descripción del evento"
+                rows={4}
+              />
+            </div>
 
-              {/* Fecha */}
+            {/* Fecha y Hora */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fecha *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Fecha *</label>
                 <input
                   type="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                   required
                 />
               </div>
-
-              {/* Hora de fin */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Hora de fin</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Hora *</label>
                 <input
                   type="time"
-                  name="end_time"
-                  value={formData.end_time}
+                  name="time"
+                  value={formData.time}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  required
                 />
               </div>
+            </div>
 
-              {/* Ubicación */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Ubicación del evento"
-                />
-              </div>
+            {/* Hora de fin */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Hora de fin</label>
+              <input
+                type="time"
+                name="end_time"
+                value={formData.end_time}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+              />
+            </div>
 
-              {/* Email */}
+            {/* Ubicación */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Ubicación</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                placeholder="Ubicación del evento"
+              />
+            </div>
+
+            {/* Email y Teléfono */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Email *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                   placeholder="email@ejemplo.com"
                   required
                 />
               </div>
-
-              {/* Categoría */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Teléfono *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  placeholder="+1234567890"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Categoría y Prioridad */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Categoría</label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 >
                   <option value="work">Trabajo</option>
                   <option value="personal">Personal</option>
@@ -245,87 +271,55 @@ const SimpleEventForm = ({ event, onClose }) => {
                   <option value="other">Otro</option>
                 </select>
               </div>
-
-              {/* Recordatorios */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Recordatorios</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="reminder_day"
-                      checked={formData.reminder_day}
-                      onChange={handleChange}
-                      className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <span className="text-sm text-gray-700">Recordar el día del evento</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="reminder_day_before"
-                      checked={formData.reminder_day_before}
-                      onChange={handleChange}
-                      className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <span className="text-sm text-gray-700">Recordar el día anterior</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="is_all_day"
-                      checked={formData.is_all_day}
-                      onChange={handleChange}
-                      className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <span className="text-sm text-gray-700">Todo el día</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Columna derecha */}
-            <div className="space-y-4">
-              {/* Hora */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Hora *</label>
-                <input
-                  type="time"
-                  name="time"
-                  value={formData.time}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-              </div>
-
-              {/* Teléfono */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="+1234567890"
-                  required
-                />
-              </div>
-
-              {/* Prioridad */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Prioridad</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Prioridad</label>
                 <select
                   name="priority"
                   value={formData.priority}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 >
                   <option value="low">Baja</option>
                   <option value="medium">Media</option>
                   <option value="high">Alta</option>
                 </select>
+              </div>
+            </div>
+
+            {/* Recordatorios */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Recordatorios</label>
+              <div className="space-y-3">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="reminder_day"
+                    checked={formData.reminder_day}
+                    onChange={handleChange}
+                    className="mr-3 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="text-base text-gray-700">Recordar el día del evento</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="reminder_day_before"
+                    checked={formData.reminder_day_before}
+                    onChange={handleChange}
+                    className="mr-3 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="text-base text-gray-700">Recordar el día anterior</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="is_all_day"
+                    checked={formData.is_all_day}
+                    onChange={handleChange}
+                    className="mr-3 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="text-base text-gray-700">Todo el día</span>
+                </label>
               </div>
             </div>
           </div>
