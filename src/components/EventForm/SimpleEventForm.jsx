@@ -330,37 +330,42 @@ const SimpleEventForm = ({ event, onClose }) => {
                       👶 ¿Para qué hijo(s) es este evento?
                     </label>
                     <div className="space-y-2">
-                      {familyConfig.kids.map((kid, index) => (
-                        <div key={index} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name={`child_${index}`}
-                            checked={formData.selected_children && formData.selected_children.includes(kid.name)}
-                            onChange={(e) => {
-                              const childName = kid.name;
-                              const currentChildren = formData.selected_children || [];
-                              let newChildren;
-                              
-                              if (e.target.checked) {
-                                // Agregar hijo
-                                newChildren = [...currentChildren, childName];
-                              } else {
-                                // Remover hijo
-                                newChildren = currentChildren.filter(name => name !== childName);
-                              }
-                              
-                              setFormData(prev => ({
-                                ...prev,
-                                selected_children: newChildren
-                              }));
-                            }}
-                            className="mr-2 h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
-                          />
-                          <span className="text-sm text-pink-800">
-                            👶 {kid.name}
-                          </span>
-                        </div>
-                      ))}
+                      {familyConfig.kids.map((kid, index) => {
+                        console.log('🔍 Rendering kid:', { index, kid, kidName: kid.name });
+                        return (
+                          <div key={index} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              name={`child_${index}`}
+                              checked={formData.selected_children && formData.selected_children.includes(kid.name)}
+                              onChange={(e) => {
+                                const childName = kid.name;
+                                const currentChildren = formData.selected_children || [];
+                                let newChildren;
+                                
+                                if (e.target.checked) {
+                                  // Agregar hijo
+                                  newChildren = [...currentChildren, childName];
+                                } else {
+                                  // Remover hijo
+                                  newChildren = currentChildren.filter(name => name !== childName);
+                                }
+                                
+                                console.log('🔍 Child selection changed:', { childName, checked: e.target.checked, newChildren });
+                                
+                                setFormData(prev => ({
+                                  ...prev,
+                                  selected_children: newChildren
+                                }));
+                              }}
+                              className="mr-2 h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                            />
+                            <span className="text-sm text-pink-800">
+                              👶 {kid.name || `Hijo ${index + 1}`}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                     {formData.selected_children && formData.selected_children.length > 0 && (
                       <div className="mt-2 p-2 bg-pink-100 rounded text-xs text-pink-700">
