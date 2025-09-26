@@ -1,0 +1,161 @@
+import React, { useState, useMemo } from 'react';
+import { useEvents } from '../../contexts/EventContext';
+import Calendar from '../Calendar/Calendar';
+import EventList from '../EventList/EventList';
+import Stats from '../Stats/Stats';
+import SearchFilters from '../SearchFilters/SearchFilters';
+import ViewToggle from '../ViewToggle/ViewToggle';
+import EventForm from '../EventForm/EventForm';
+
+const MainApp = () => {
+  const { events, createEvent, updateEvent, deleteEvent, searchEvents } = useEvents();
+  const [currentView, setCurrentView] = useState('calendar');
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [filters, setFilters] = useState({
+    term: '',
+    category: '',
+    priority: '',
+    dateRange: { start: '', end: '' }
+  });
+
+  // Filtrar eventos basado en los filtros
+  const filteredEvents = useMemo(() => {
+    if (!events || !Array.isArray(events)) return [];
+
+    return events.filter(event => {
+      // Filtro por término de búsqueda
+      if (filters.term) {
+        const searchTerm = filters.term.toLowerCase();
+        const matchesTitle = event.title?.toLowerCase().includes(searchTerm);
+        const matchesDescription = event.description?.toLowerCase().includes(searchTerm);
+        const matchesLocation = event.location?.toLowerCase().includes(searchTerm);
+        
+        if (!matchesTitle && !matchesDescription && !matchesLocation) {
+          return false;
+        }
+      }
+
+      // Filtro por categoría
+      if (filters.category && event.category !== filters.category) {
+        return false;
+      }
+
+      // Filtro por prioridad
+      if (filters.priority && event.priority !== filters.priority) {
+        return false;
+      }
+
+      // Filtro por rango de fechas
+      if (filters.dateRange.start) {
+        const eventDate = new Date(event.date);
+        const startDate = new Date(filters.dateRange.start);
+        if (eventDate < startDate) return false;
+      }
+
+      if (filters.dateRange.end) {
+        const eventDate = new Date(event.date);
+        const endDate = new Date(filters.dateRange.end);
+        if (eventDate > endDate) return false;
+      }
+
+      return true;
+    });
+  }, [events, filters]);
+
+  // Manejar búsqueda y filtros
+  const handleSearch = (searchFilters) => {
+    setFilters(searchFilters);
+  };
+
+  // Manejar creación de evento
+  const handleCreateEvent = () => {
+    setEditingEvent(null);
+    setShowEventForm(true);
+  };
+
+  // Manejar edición de evento
+  const handleEditEvent = (event) => {
+    setEditingEvent(event);
+    setShowEventForm(true);
+  };
+
+  // Manejar eliminación de evento
+  const handleDeleteEvent = async (eventId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este evento?')) {
+      try {
+        await deleteEvent(eventId);
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Error al eliminar el evento');
+      }
+    }
+  };
+
+  // Cerrar formulario
+  const handleCloseForm = () => {
+    setShowEventForm(false);
+    setEditingEvent(null);
+  };
+
+  // Renderizar contenido basado en la vista actual
+  const renderContent = () => {
+    switch (currentView) {
+      case 'list':
+        return (
+          <EventList
+            events={filteredEvents}
+            onEdit={handleEditEvent}
+            onDelete={handleDeleteEvent}
+          />
+        );
+      case 'stats':
+        return <Stats events={events} />;
+      case 'calendar':
+      default:
+        return <Calendar />;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Toggle de vista */}
+      <ViewToggle
+        currentView={currentView}
+        onViewChange={setCurrentView}
+      />
+
+      {/* Filtros de búsqueda (solo para vista de lista) */}
+      {currentView === 'list' && (
+        <SearchFilters
+          onSearch={handleSearch}
+        />
+      )}
+
+      {/* Botón de nuevo evento (solo para vista de lista) */}
+      {currentView === 'list' && (
+        <div className="flex justify-end">
+          <button
+            onClick={handleCreateEvent}
+            className="btn-primary"
+          >
+            ➕ Nuevo Evento
+          </button>
+        </div>
+      )}
+
+      {/* Contenido principal */}
+      {renderContent()}
+
+      {/* Formulario de evento */}
+      {showEventForm && (
+        <EventForm
+          event={editingEvent}
+          onClose={handleCloseForm}
+        />
+      )}
+    </div>
+  );
+};
+
+export default MainApp;
