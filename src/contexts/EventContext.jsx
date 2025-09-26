@@ -146,8 +146,8 @@ export const EventProvider = ({ children }) => {
       // Determinar el tipo de error y mostrar mensaje apropiado
       let errorMessage = 'Error desconocido al cargar eventos';
       
-      if (error.message && error.message.includes('HTML en lugar de JSON')) {
-        errorMessage = 'El backend no está funcionando correctamente. Usando modo de demostración.';
+      if (error.message === 'BACKEND_NOT_AVAILABLE' || (error.message && error.message.includes('HTML en lugar de JSON'))) {
+        errorMessage = 'Modo de demostración activado';
       } else if (error.code === 'NETWORK_ERROR' || !navigator.onLine) {
         errorMessage = 'Sin conexión a internet. Verifica tu conexión y vuelve a intentar.';
       } else if (error.response?.status === 404) {

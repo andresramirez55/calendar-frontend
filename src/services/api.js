@@ -34,8 +34,8 @@ api.interceptors.response.use(
     // Verificar si la respuesta es HTML en lugar de JSON
     const contentType = response.headers['content-type'];
     if (contentType && contentType.includes('text/html')) {
-      console.error('Received HTML instead of JSON:', response.data);
-      throw new Error('El servidor está devolviendo HTML en lugar de JSON. El backend puede no estar funcionando.');
+      console.warn('Backend not available, using demo mode');
+      throw new Error('BACKEND_NOT_AVAILABLE');
     }
     return response;
   },
