@@ -203,50 +203,51 @@ const Calendar = () => {
 
   return (
     <div className="w-full">
-      {/* Header del calendario */}
-      <div className="bg-white/95 backdrop-blur-lg rounded-t-2xl border-b border-white/20 shadow-lg p-4">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <span className="text-3xl">📅</span>
-            Mi Calendario
-          </h1>
-          
-          <div className="flex flex-col sm:flex-row gap-3 items-center w-full lg:w-auto">
-            {selectedDateForDelete && (
-              <span className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-lg border border-gray-200 text-center w-full sm:w-auto">
+      {/* Header del calendario mejorado */}
+      <div className="calendar-header">
+        <div className="calendar-title">
+          <div className="logo-icon">📅</div>
+          <div>
+            <h1>Mi Calendario</h1>
+            <p className="text-sm text-gray-600 mt-1">Gestiona tus eventos familiares</p>
+          </div>
+        </div>
+        
+        <div className="calendar-controls">
+          {selectedDateForDelete && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg">
                 📅 {selectedDateForDelete}
               </span>
-            )}
-            
-            {selectedDateForDelete && (() => {
-              const eventsOnDate = events.filter(event => {
-                const eventDate = event.date.split('T')[0];
-                return eventDate === selectedDateForDelete;
-              });
-              
-              return eventsOnDate.length > 0 ? (
-                <button
-                  onClick={handleDeleteEventsFromDate}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 shadow-lg w-full sm:w-auto"
-                >
-                  🗑️ Eliminar ({eventsOnDate.length})
-                </button>
-              ) : null;
-            })()}
-            
-            <button
-              onClick={() => setShowEventForm(true)}
-              className="btn-primary w-full sm:w-auto"
-            >
-              ➕ Nuevo Evento
-            </button>
-          </div>
+              {(() => {
+                const eventsOnDate = events.filter(event => {
+                  const eventDate = event.date.split('T')[0];
+                  return eventDate === selectedDateForDelete;
+                });
+                
+                return eventsOnDate.length > 0 ? (
+                  <button
+                    onClick={handleDeleteEventsFromDate}
+                    className="btn btn-danger"
+                  >
+                    🗑️ Eliminar ({eventsOnDate.length})
+                  </button>
+                ) : null;
+              })()}
+            </div>
+          )}
+          
+          <button
+            onClick={() => setShowEventForm(true)}
+            className="btn btn-primary"
+          >
+            ➕ Nuevo Evento
+          </button>
         </div>
       </div>
 
       {/* Calendario principal */}
-      <div className="w-full p-2">
-        <div className="bg-white/95 backdrop-blur-lg rounded-b-2xl shadow-xl border border-white/20 overflow-hidden min-h-[600px] w-full">
+      <div className="calendar-container">
                 <BigCalendar
                   localizer={localizer}
                   events={calendarEvents}
