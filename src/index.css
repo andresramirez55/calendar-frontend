@@ -1,5 +1,5 @@
-/* Basic CSS for the calendar app */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Modern Calendar App CSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 * {
   margin: 0;
@@ -9,12 +9,15 @@
 
 html {
   font-family: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: #f8fafc; /* Light gray background */
-  color: #1e293b; /* Dark text */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  color: #1e293b;
   line-height: 1.6;
+  min-height: 100vh;
 }
 
 #root {
@@ -23,144 +26,220 @@ body {
   width: 100%;
 }
 
-/* General styling for buttons */
+/* Modern Button Styles */
 .btn-primary {
-  background-color: #3b82f6; /* Blue */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary:hover {
-  background-color: #2563eb; /* Darker blue */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
 }
 
 .btn-secondary {
-  background-color: #e2e8f0; /* Light gray */
-  color: #1e293b; /* Dark text */
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1e293b;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
-  background-color: #cbd5e1; /* Darker light gray */
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .btn-danger {
-  background-color: #ef4444; /* Red */
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
 }
 
 .btn-danger:hover {
-  background-color: #dc2626; /* Darker red */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
 }
 
-/* Card styling */
+/* Modern Card Styling */
 .card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Input field styling */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Modern Input Field Styling */
 .input-field {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #cbd5e1; /* Light gray border */
-  border-radius: 0.375rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
   font-size: 1rem;
   line-height: 1.5;
   color: #1e293b;
-  background-color: #ffffff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #3b82f6; /* Blue focus ring */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
 }
 
+.input-field::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Modern Label Styling */
 .label {
   display: block;
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 500; /* font-medium */
-  color: #334155; /* text-gray-700 */
-  margin-bottom: 0.25rem; /* mb-1 */
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Modal styling */
+/* Modern Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  max-width: 600px;
   width: 90%;
   position: relative;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
 }
 
 .modal-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: #1e293b;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .modal-close-button {
-  background: none;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
   color: #64748b;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
-/* React Big Calendar overrides */
+.modal-close-button:hover {
+  background: rgba(255, 107, 107, 0.9);
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Modern React Big Calendar Styling */
 .rbc-calendar {
-  height: 80vh; /* Adjust as needed */
+  height: 80vh;
   font-family: 'Inter', sans-serif;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
 }
 
 .rbc-event {
-  background-color: #3b82f6; /* Default event color */
-  border-radius: 4px;
-  padding: 2px 5px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 4px 8px;
   color: white;
   font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rbc-event:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 }
 
 .rbc-event-content {
@@ -170,31 +249,70 @@ body {
 }
 
 .rbc-header {
-  padding: 10px 0;
-  font-weight: 600;
-  color: #334155;
+  padding: 15px 10px;
+  font-weight: 700;
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.rbc-toolbar {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  border-radius: 16px 16px 0 0;
+  backdrop-filter: blur(10px);
 }
 
 .rbc-toolbar button {
-  background-color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.9);
   color: #1e293b;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  padding: 10px 16px;
+  border-radius: 12px;
   margin: 0 5px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
 .rbc-toolbar button:hover {
-  background-color: #cbd5e1;
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
 .rbc-toolbar button.rbc-active {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
-/* Animations */
+/* Modern Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -202,4 +320,28 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Loading Animation */
+.loading {
+  animation: pulse 2s infinite;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }

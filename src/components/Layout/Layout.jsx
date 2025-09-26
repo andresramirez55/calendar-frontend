@@ -5,138 +5,80 @@ const Layout = ({ children }) => {
   const { loading, error, clearError } = useEvents();
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
-      {/* Header */}
-      <header style={{ 
-        backgroundColor: 'white', 
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)', 
-        borderBottom: '1px solid #e2e8f0' 
-      }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            height: '64px' 
-          }}>
+    <div className="min-h-screen">
+      {/* Modern Header */}
+      <header className="bg-white/90 backdrop-blur-lg border-b border-white/20 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <h1 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: 'bold', 
-                color: '#3b82f6' 
-              }}>
-                📅 Calendar App
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <span className="text-white text-xl font-bold">📅</span>
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Calendar App
               </h1>
             </div>
 
             {/* Navigation */}
-            <nav style={{ display: 'flex', gap: '2rem' }}>
-              <a href="#" style={{ 
-                color: '#1e293b', 
-                padding: '0.5rem 0.75rem', 
-                fontSize: '0.875rem', 
-                fontWeight: '500',
-                textDecoration: 'none'
-              }}>
+            <nav className="hidden md:flex space-x-8">
+              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
                 Calendario
               </a>
-              <a href="#" style={{ 
-                color: '#64748b', 
-                padding: '0.5rem 0.75rem', 
-                fontSize: '0.875rem', 
-                fontWeight: '500',
-                textDecoration: 'none'
-              }}>
+              <a href="#" className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
                 Eventos
               </a>
-              <a href="#" style={{ 
-                color: '#64748b', 
-                padding: '0.5rem 0.75rem', 
-                fontSize: '0.875rem', 
-                fontWeight: '500',
-                textDecoration: 'none'
-              }}>
+              <a href="#" className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
                 Estadísticas
               </a>
             </nav>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button className="text-gray-700 hover:text-blue-600 p-2">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main content */}
-      <main style={{ 
-        maxWidth: '1280px', 
-        margin: '0 auto', 
-        padding: '1.5rem 1rem' 
-      }}>
-        {children}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="hover-lift">
+          {children}
+        </div>
       </main>
 
-      {/* Loading overlay */}
+      {/* Modern Loading overlay */}
       {loading && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.25)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 50
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '0.5rem',
-            padding: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem'
-          }}>
-            <div style={{
-              width: '24px',
-              height: '24px',
-              border: '2px solid #e2e8f0',
-              borderTop: '2px solid #3b82f6',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            <span style={{ color: '#374151' }}>Cargando...</span>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 flex items-center space-x-4">
+            <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <span className="text-gray-700 font-semibold text-lg">Cargando eventos...</span>
           </div>
         </div>
       )}
 
-      {/* Error notification */}
+      {/* Modern Error notification */}
       {error && (
-        <div style={{
-          position: 'fixed',
-          top: '1rem',
-          right: '1rem',
-          backgroundColor: '#fef2f2',
-          border: '1px solid #fecaca',
-          color: '#dc2626',
-          padding: '0.75rem 1rem',
-          borderRadius: '0.375rem',
-          zIndex: 50,
-          maxWidth: '24rem'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.875rem' }}>{error}</span>
+        <div className="fixed top-4 right-4 bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-2xl shadow-lg z-50 max-w-md animate-slideUp backdrop-blur-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                <span className="text-red-600 text-sm">⚠️</span>
+              </div>
+              <span className="font-medium">{error}</span>
             </div>
             <button
               onClick={clearError}
-              style={{
-                marginLeft: '1rem',
-                color: '#dc2626',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer'
-              }}
+              className="ml-4 text-red-600 hover:text-red-800 hover:bg-red-100 p-1 rounded-full transition-all duration-200"
             >
-              ✕
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
         </div>
