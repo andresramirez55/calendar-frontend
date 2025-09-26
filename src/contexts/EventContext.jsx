@@ -153,21 +153,38 @@ export const EventProvider = ({ children }) => {
   const createEvent = async (eventData) => {
     try {
       actions.setLoading(true);
-      const newEvent = await eventService.createEvent(eventData);
-      actions.addEvent(newEvent.event);
+      const response = await eventService.createEvent(eventData);
       
-      // Agregar recordatorios si están habilitados
-      if (newEvent.event.reminder_day) {
-        reminderService.addReminder(newEvent.event, 'day');
+      // Manejar diferentes estructuras de respuesta
+      let event;
+      if (response && response.event) {
+        event = response.event;
+      } else if (response && response.data) {
+        event = response.data;
+      } else if (response && response.id) {
+        event = response;
+      } else {
+        console.warn('Unexpected response structure:', response);
+        event = response;
       }
-      if (newEvent.event.reminder_day_before) {
-        reminderService.addReminder(newEvent.event, 'day_before');
+      
+      actions.addEvent(event);
+      
+      // Agregar recordatorios si están habilitados (con verificación segura)
+      if (event && typeof event === 'object') {
+        if (event.reminder_day) {
+          reminderService.addReminder(event, 'day');
+        }
+        if (event.reminder_day_before) {
+          reminderService.addReminder(event, 'day_before');
+        }
       }
       
       actions.setLoading(false);
-      return newEvent;
+      return response;
     } catch (error) {
-      actions.setError(error.message);
+      console.error('Error creating event:', error);
+      actions.setError(`Error al crear evento: ${error.message}`);
       actions.setLoading(false);
       throw error;
     }

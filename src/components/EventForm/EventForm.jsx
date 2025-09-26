@@ -15,6 +15,8 @@ const EventForm = ({ event, onClose }) => {
     priority: 'medium',
     email: '',
     phone: '',
+    reminder_day: false,
+    reminder_day_before: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -33,6 +35,8 @@ const EventForm = ({ event, onClose }) => {
         priority: event.priority || 'medium',
         email: event.email || '',
         phone: event.phone || '',
+        reminder_day: event.reminder_day || false,
+        reminder_day_before: event.reminder_day_before || false,
       });
     } else {
       // Valores por defecto para nuevo evento
@@ -49,6 +53,8 @@ const EventForm = ({ event, onClose }) => {
         priority: 'medium',
         email: '',
         phone: '',
+        reminder_day: false,
+        reminder_day_before: false,
       });
     }
   }, [event]);
@@ -301,6 +307,33 @@ const EventForm = ({ event, onClose }) => {
               {errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
               )}
+            </div>
+
+            {/* Recordatorios */}
+            <div className="space-y-3">
+              <label className="label">Recordatorios</label>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    name="reminder_day"
+                    checked={formData.reminder_day}
+                    onChange={handleChange}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Recordatorio el día del evento (1 hora antes)</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    name="reminder_day_before"
+                    checked={formData.reminder_day_before}
+                    onChange={handleChange}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Recordatorio el día anterior (9:00 AM)</span>
+                </label>
+              </div>
             </div>
           </div>
 
