@@ -26,6 +26,7 @@ body {
   display: flex;
   min-height: 100vh;
   width: 100%;
+  max-width: none;
 }
 
 /* Modern Button Styles */
@@ -218,7 +219,8 @@ body {
 /* Modern React Big Calendar Styling */
 .rbc-calendar {
   height: 600px;
-  width: 100%;
+  width: 100% !important;
+  min-width: 100% !important;
   font-family: 'Inter', sans-serif;
   background: transparent;
   border-radius: 0;

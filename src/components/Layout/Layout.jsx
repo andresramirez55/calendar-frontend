@@ -55,7 +55,7 @@ const Layout = ({ children }) => {
 
       {/* Main content */}
       <main className="w-full min-h-screen">
-        <div className="w-full">
+        <div className="w-full max-w-none">
           {children}
         </div>
       </main>

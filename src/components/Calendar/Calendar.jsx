@@ -202,7 +202,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-none">
       {/* Header del calendario */}
       <div className="bg-white/95 backdrop-blur-lg rounded-t-2xl border-b border-white/20 shadow-lg p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -246,13 +246,13 @@ const Calendar = () => {
 
       {/* Calendario principal */}
       <div className="w-full p-4 lg:p-6">
-        <div className="bg-white/95 backdrop-blur-lg rounded-b-2xl shadow-xl border border-white/20 overflow-hidden min-h-[600px]">
+        <div className="bg-white/95 backdrop-blur-lg rounded-b-2xl shadow-xl border border-white/20 overflow-hidden min-h-[600px] w-full">
                 <BigCalendar
                   localizer={localizer}
                   events={calendarEvents}
                   startAccessor="start"
                   endAccessor="end"
-                  style={{ height: '600px', width: '100%' }}
+                  style={{ height: '600px', width: '100%', minWidth: '100%' }}
                   onSelectEvent={handleSelectEvent}
                   onSelectSlot={handleSelectSlot}
                   onDoubleClickEvent={handleDoubleClickEvent}
