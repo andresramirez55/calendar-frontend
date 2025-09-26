@@ -5,6 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useEvents } from '../../contexts/EventContext';
 import SimpleEventForm from '../EventForm/SimpleEventForm';
 import SimpleEventDetails from './SimpleEventDetails';
+import EventListView from './EventListView';
 
 // Configurar moment para el calendario
 moment.locale('es');
@@ -17,6 +18,7 @@ const Calendar = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [currentDate, setCurrentDate] = useState(new Date(2025, 8, 22)); // Septiembre 2025
   const [selectedDateForDelete, setSelectedDateForDelete] = useState(null);
+  const [view, setView] = useState('calendar'); // 'calendar' o 'list'
 
   // Calendar state management
 
@@ -137,6 +139,30 @@ const Calendar = () => {
     setSelectedEvent(null);
   };
 
+  // Handlers para la vista de lista
+  const handleEditEvent = (event) => {
+    setEditingEvent(event);
+    setShowEventForm(true);
+  };
+
+  const handleViewEvent = (event) => {
+    setSelectedEvent(event);
+    setShowEventDetails(true);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este evento?')) {
+      try {
+        // Aquí deberías llamar a tu función de eliminación del contexto
+        console.log('Eliminando evento:', eventId);
+        // await deleteEvent(eventId);
+      } catch (error) {
+        console.error('Error al eliminar evento:', error);
+        alert('Error al eliminar el evento');
+      }
+    }
+  };
+
   // Eliminar eventos de la fecha seleccionada
   const handleDeleteEventsFromDate = async () => {
     if (!selectedDateForDelete) {
@@ -214,7 +240,41 @@ const Calendar = () => {
         </div>
         
         <div className="calendar-controls">
-          {selectedDateForDelete && (
+          {/* Selector de vista */}
+          <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setView('calendar')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                view === 'calendar'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              📅 Calendario
+            </button>
+            <button
+              onClick={() => setView('list')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                view === 'list'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              📋 Lista
+            </button>
+            <button
+              onClick={() => setView('stats')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                view === 'stats'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              📊 Estadísticas
+            </button>
+          </div>
+
+          {selectedDateForDelete && view === 'calendar' && (
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg">
                 📅 {selectedDateForDelete}
@@ -246,9 +306,10 @@ const Calendar = () => {
         </div>
       </div>
 
-      {/* Calendario principal */}
-      <div className="calendar-container">
-                <BigCalendar
+      {/* Contenido principal según la vista */}
+      {view === 'calendar' && (
+        <div className="calendar-container">
+          <BigCalendar
                   localizer={localizer}
                   events={calendarEvents}
                   startAccessor="start"
@@ -295,7 +356,43 @@ const Calendar = () => {
                     )
                   }}
                 />
-      </div>
+        </div>
+      )}
+
+      {/* Vista de lista */}
+      {view === 'list' && (
+        <EventListView
+          events={events}
+          onEditEvent={handleEditEvent}
+          onDeleteEvent={handleDeleteEvent}
+          onViewEvent={handleViewEvent}
+        />
+      )}
+
+      {/* Vista de estadísticas */}
+      {view === 'stats' && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">📊 Estadísticas</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="text-3xl font-bold text-blue-600">{events.length}</div>
+              <div className="text-blue-800">Total de eventos</div>
+            </div>
+            <div className="bg-green-50 rounded-lg p-4">
+              <div className="text-3xl font-bold text-green-600">
+                {events.filter(event => moment(event.date).isAfter(moment())).length}
+              </div>
+              <div className="text-green-800">Eventos futuros</div>
+            </div>
+            <div className="bg-purple-50 rounded-lg p-4">
+              <div className="text-3xl font-bold text-purple-600">
+                {[...new Set(events.map(event => event.category))].length}
+              </div>
+              <div className="text-purple-800">Categorías</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Formulario de evento */}
       {showEventForm && (
