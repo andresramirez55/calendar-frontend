@@ -23,19 +23,19 @@ const Layout = ({ children }) => {
             </div>
 
             {/* Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
+            <nav className="hidden md:flex space-x-4">
+              <a href="#" className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/80">
                 Calendario
               </a>
-              <a href="#" className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
+              <a href="#" className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60">
                 Eventos
               </a>
-              <a href="#" className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
+              <a href="#" className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60">
                 Estadísticas
               </a>
               <button
                 onClick={() => setShowFamilySettings(true)}
-                className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 flex items-center gap-2"
+                className="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 bg-white/60 flex items-center gap-2"
               >
                 👨‍👩‍👧‍👦 Familia
               </button>

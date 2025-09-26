@@ -281,6 +281,82 @@ button {
   color: #1e293b !important;
 }
 
+/* Fix navigation styling */
+nav a, nav button {
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  margin: 0 2px !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  font-weight: 500 !important;
+}
+
+nav a:hover, nav button:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  color: #3b82f6 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Fix header styling */
+header {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Fix text visibility */
+h1, h2, h3, h4, h5, h6 {
+  color: #1e293b !important;
+  font-weight: 600 !important;
+}
+
+/* Fix all text elements */
+p, span, div, label {
+  color: #1e293b !important;
+}
+
+/* Fix button visibility */
+button {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  font-weight: 500 !important;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  color: #3b82f6 !important;
+}
+
+/* Fix link visibility */
+a {
+  color: #1e293b !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: #3b82f6 !important;
+}
+
+/* Fix form elements */
+input, select, textarea {
+  background: white !important;
+  color: #1e293b !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Fix card backgrounds */
+.card, .bg-white, .bg-white\/95, .bg-white\/90 {
+  background: rgba(255, 255, 255, 0.98) !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
 .rbc-event {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 8px;
