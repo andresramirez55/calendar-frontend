@@ -25,18 +25,20 @@ const FamilySettings = ({ onClose }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        overflow: 'hidden'
       }}
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden"
         style={{
           position: 'relative',
           zIndex: 100000,
           backgroundColor: 'white',
           borderRadius: '8px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          overflow: 'hidden'
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -56,24 +58,24 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Contenido */}
-        <div className="px-6 py-4 max-h-[70vh] overflow-y-auto space-y-6">
+        <div className="px-4 py-4 max-h-[60vh] overflow-y-auto space-y-4">
           {/* Miembros de la familia */}
           <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">👨‍👩‍👧‍👦 Miembros de la familia</h4>
-            <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">👨‍👩‍👧‍👦 Miembros de la familia</h4>
+            <div className="space-y-3">
               {familyMembers.map((member, index) => (
-                <div key={member.id} className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center space-x-4 mb-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 font-semibold">
+                <div key={member.id} className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 font-semibold text-sm">
                         {member.name.charAt(0)}
                       </span>
                     </div>
-                    <h5 className="font-medium text-gray-900">Miembro {index + 1}</h5>
+                    <h5 className="font-medium text-gray-900 text-sm">Padre {index + 1}</h5>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Nombre completo</label>
                       <input
                         type="text"
                         value={member.name}
@@ -82,12 +84,12 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].name = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Nombre completo"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ej: Juan Pérez"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
                       <input
                         type="email"
                         value={member.email}
@@ -96,12 +98,12 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].email = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Email"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="juan@ejemplo.com"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Teléfono</label>
                       <input
                         type="tel"
                         value={member.phone}
@@ -110,8 +112,8 @@ const FamilySettings = ({ onClose }) => {
                           updated[index].phone = e.target.value;
                           setFamilyMembers(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Teléfono"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="+1 234 567 8900"
                       />
                     </div>
                   </div>
@@ -122,14 +124,14 @@ const FamilySettings = ({ onClose }) => {
 
           {/* Niñas */}
           <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">👧 Niñas</h4>
-            <div className="space-y-3">
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">👧 Niñas</h4>
+            <div className="space-y-2">
               {kids.map((kid, index) => (
                 <div key={index} className="p-3 bg-pink-50 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">👧</span>
+                    <span className="text-xl">👧</span>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Niña {index + 1}</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Niña {index + 1}</label>
                       <input
                         type="text"
                         value={kid}
@@ -138,8 +140,8 @@ const FamilySettings = ({ onClose }) => {
                           updated[index] = e.target.value;
                           setKids(updated);
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                        placeholder="Nombre de la niña"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                        placeholder="Ej: María"
                       />
                     </div>
                     <button
@@ -147,7 +149,7 @@ const FamilySettings = ({ onClose }) => {
                         const updated = kids.filter((_, i) => i !== index);
                         setKids(updated);
                       }}
-                      className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100"
+                      className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100 text-sm"
                     >
                       ✕
                     </button>
@@ -156,7 +158,7 @@ const FamilySettings = ({ onClose }) => {
               ))}
               <button
                 onClick={() => setKids([...kids, ''])}
-                className="w-full py-3 border-2 border-dashed border-pink-300 rounded-lg text-pink-500 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50 transition-colors"
+                className="w-full py-2 border-2 border-dashed border-pink-300 rounded-lg text-pink-500 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50 transition-colors text-sm"
               >
                 + Agregar niña
               </button>
@@ -164,9 +166,9 @@ const FamilySettings = ({ onClose }) => {
           </div>
 
           {/* Información adicional */}
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <h5 className="font-semibold text-blue-900 mb-3">💡 Cómo funciona</h5>
-            <ul className="text-sm text-blue-800 space-y-2">
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <h5 className="font-semibold text-blue-900 mb-2 text-sm">💡 Cómo funciona</h5>
+            <ul className="text-xs text-blue-800 space-y-1">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600">•</span>
                 <span>Los eventos se pueden compartir entre ambos padres</span>
@@ -179,27 +181,23 @@ const FamilySettings = ({ onClose }) => {
                 <span className="text-blue-600">•</span>
                 <span>Los recordatorios se envían a ambos padres</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="text-blue-600">•</span>
-                <span>Cada evento puede ser privado o compartido</span>
-              </li>
             </ul>
           </div>
         </div>
 
         {/* Botones */}
-        <div className="flex justify-end space-x-3 px-6 py-4 border-t border-gray-200">
+        <div className="flex justify-end space-x-3 px-4 py-3 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium text-sm"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm"
           >
-            💾 Guardar configuración
+            💾 Guardar
           </button>
         </div>
       </div>
