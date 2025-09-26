@@ -12,8 +12,10 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL;
   }
   
-  // En producción, usar el backend en Railway
-  return 'https://web-production-e67c7.up.railway.app';
+  // En producción, el backend debe estar en una URL diferente
+  // Por ahora usar localhost para modo demo local
+  console.warn('⚠️ Backend URL no configurada, usando modo demo');
+  return 'http://localhost:8080';
 };
 
 // Log para debug
@@ -28,17 +30,30 @@ const api = axios.create({
   },
 });
 
-// Interceptor para debug de errores
+// Interceptor para manejar errores y HTML responses
 api.interceptors.response.use(
   (response) => {
-    console.log('✅ Response successful:', response.status, response.data);
+    // Verificar si la respuesta es HTML en lugar de JSON
+    if (response.data && typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+      console.error('❌ Backend returned HTML instead of JSON - Backend not available');
+      console.error('❌ Response data:', response.data.substring(0, 200) + '...');
+      throw new Error('BACKEND_NOT_AVAILABLE');
+    }
+    
+    console.log('✅ Response successful:', response.status, typeof response.data);
     return response;
   },
   (error) => {
     console.error('❌ API Error:', error.response?.status, error.response?.data);
     console.error('❌ Error details:', error.message);
     
-    // Pasar errores normalmente para que el frontend los maneje
+    // Si es error de red o 404, considerar backend no disponible
+    if (error.code === 'ERR_NETWORK' || 
+        (error.response && error.response.status === 404)) {
+      console.warn('⚠️ Network error or 404 - Backend not available');
+      throw new Error('BACKEND_NOT_AVAILABLE');
+    }
+    
     return Promise.reject(error);
   }
 );

@@ -344,6 +344,36 @@ export const EventProvider = ({ children }) => {
       // Manejar errores específicos del backend
       let errorMessage = 'Error al crear evento';
       
+      // Si el backend no está disponible, crear evento en modo demo
+      if (error.message === 'BACKEND_NOT_AVAILABLE') {
+        console.warn('Backend not available, creating demo event');
+        const demoEvent = {
+          id: Date.now(),
+          title: validatedEventData?.title || eventData.title,
+          date: validatedEventData?.date || eventData.date,
+          time: validatedEventData?.time || eventData.time || '10:00',
+          location: validatedEventData?.location || eventData.location || '',
+          email: validatedEventData?.email || eventData.email || 'demo@ejemplo.com',
+          phone: validatedEventData?.phone || eventData.phone || '1234567890',
+          description: validatedEventData?.description || eventData.description || '',
+          category: validatedEventData?.category || eventData.category || 'personal',
+          priority: validatedEventData?.priority || eventData.priority || 'medium',
+          reminder_day: validatedEventData?.reminder_day || eventData.reminder_day || true,
+          reminder_day_before: validatedEventData?.reminder_day_before || eventData.reminder_day_before || true,
+          is_all_day: validatedEventData?.is_all_day || eventData.is_all_day || false,
+          color: validatedEventData?.color || eventData.color || '#007AFF',
+          is_demo: true
+        };
+        actions.addEvent(demoEvent);
+        actions.setLoading(false);
+        
+        // Mostrar mensaje de modo demo
+        actions.setError('💡 Modo demo activado - Backend no disponible. El evento se guardó localmente.');
+        
+        // No lanzar error, retornar el evento demo
+        return { event: demoEvent, is_demo: true };
+      }
+      
       if (error.response) {
         // Error de respuesta del servidor
         const status = error.response.status;
@@ -363,10 +393,6 @@ export const EventProvider = ({ children }) => {
         } else {
           errorMessage = `Error del servidor (${status}): ${data?.error || error.message}`;
         }
-      } else if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
-        // Error de red
-        console.warn('Network error, backend may be down');
-        errorMessage = 'Error de conexión: Backend no disponible';
       } else {
         // Otros errores
         errorMessage = `Error al crear evento: ${error.message}`;
