@@ -8,14 +8,12 @@ const getApiUrl = () => {
   }
   
   // Si hay una variable de entorno específica, usarla
-  if (import.meta.env.VITE_API_URL) {
+  if (import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL !== 'BACKEND_NOT_CONFIGURED') {
     return import.meta.env.VITE_API_URL;
   }
   
-  // En producción, el backend debe estar en una URL diferente
-  // Por ahora usar localhost para modo demo local
-  console.warn('⚠️ Backend URL no configurada, usando modo demo');
-  return 'http://localhost:8080';
+  // En producción, usar el backend en Railway
+  return 'https://web-production-e67c7.up.railway.app';
 };
 
 // Log para debug
