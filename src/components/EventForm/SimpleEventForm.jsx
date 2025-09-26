@@ -24,7 +24,8 @@ const SimpleEventForm = ({ event, onClose }) => {
     notify_papa: false,
     notify_mama: false,
     child_tag: '',
-    family_members: []
+    family_members: [],
+    selected_children: []
   });
 
   const [loading, setLoading] = useState(false);
@@ -72,7 +73,8 @@ const SimpleEventForm = ({ event, onClose }) => {
         notify_papa: Boolean(event.notify_papa),
         notify_mama: Boolean(event.notify_mama),
         child_tag: event.child_tag || '',
-        family_members: event.family_members || []
+        family_members: event.family_members || [],
+        selected_children: event.selected_children || []
       });
     }
   }, [event]);
@@ -287,6 +289,7 @@ const SimpleEventForm = ({ event, onClose }) => {
                 {/* Selector de familiares específicos */}
                 {formData.notify_family && (
                   <div className="space-y-2">
+                    <p className="text-xs text-pink-700 mb-2">Selecciona a quién notificar:</p>
                     {familyConfig.familyMembers.map((member, index) => (
                       <div key={index} className="flex items-center">
                         <input
@@ -304,25 +307,50 @@ const SimpleEventForm = ({ event, onClose }) => {
                   </div>
                 )}
 
-                {/* Etiqueta para hijo */}
+                {/* Selector de hijos (múltiple) */}
                 {formData.notify_family && familyConfig.kids && familyConfig.kids.length > 0 && (
                   <div className="mt-3">
-                    <label className="block text-sm font-medium text-pink-700 mb-1">
-                      👶 ¿Para qué hijo es este evento?
+                    <label className="block text-sm font-medium text-pink-700 mb-2">
+                      👶 ¿Para qué hijo(s) es este evento?
                     </label>
-                    <select
-                      name="child_tag"
-                      value={formData.child_tag}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-pink-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
-                    >
-                      <option value="">Seleccionar hijo...</option>
+                    <div className="space-y-2">
                       {familyConfig.kids.map((kid, index) => (
-                        <option key={index} value={kid.name}>
-                          👶 {kid.name}
-                        </option>
+                        <div key={index} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            name={`child_${index}`}
+                            checked={formData.selected_children && formData.selected_children.includes(kid.name)}
+                            onChange={(e) => {
+                              const childName = kid.name;
+                              const currentChildren = formData.selected_children || [];
+                              let newChildren;
+                              
+                              if (e.target.checked) {
+                                // Agregar hijo
+                                newChildren = [...currentChildren, childName];
+                              } else {
+                                // Remover hijo
+                                newChildren = currentChildren.filter(name => name !== childName);
+                              }
+                              
+                              setFormData(prev => ({
+                                ...prev,
+                                selected_children: newChildren
+                              }));
+                            }}
+                            className="mr-2 h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-pink-800">
+                            👶 {kid.name}
+                          </span>
+                        </div>
                       ))}
-                    </select>
+                    </div>
+                    {formData.selected_children && formData.selected_children.length > 0 && (
+                      <div className="mt-2 p-2 bg-pink-100 rounded text-xs text-pink-700">
+                        <strong>Hijos seleccionados:</strong> {formData.selected_children.join(', ')}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
