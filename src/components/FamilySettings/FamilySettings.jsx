@@ -31,14 +31,13 @@ const FamilySettings = ({ onClose }) => {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-[85vh] overflow-hidden"
+        className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-[85vh] flex flex-col"
         style={{
           position: 'relative',
           zIndex: 100000,
           backgroundColor: 'white',
           borderRadius: '12px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          overflow: 'hidden',
           maxWidth: '500px',
           width: '90%',
           maxHeight: '85vh'
@@ -61,7 +60,7 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Contenido */}
-        <div className="px-6 py-4 max-h-[50vh] overflow-y-auto space-y-4">
+        <div className="px-6 py-4 flex-1 overflow-y-auto space-y-4">
           {/* Miembros de la familia */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4">👨‍👩‍👧‍👦 Miembros de la familia</h4>
@@ -170,10 +169,10 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Botones */}
-        <div className="flex justify-end space-x-3 px-6 py-4 border-t border-gray-200 bg-white">
+        <div className="flex justify-end space-x-3 px-6 py-4 border-t border-gray-200 bg-white flex-shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium text-sm"
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
           >
             Cancelar
           </button>
