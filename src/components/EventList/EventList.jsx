@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -150,4 +150,4 @@ const EventList = ({ events, onEdit, onDelete, onView }) => {
   );
 };
 
-export default EventList;
+export default memo(EventList);

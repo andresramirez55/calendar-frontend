@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -197,4 +197,4 @@ const Stats = ({ events }) => {
   );
 };
 
-export default Stats;
+export default memo(Stats);

@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, lazy, Suspense } from 'react';
 import { useEvents } from '../../contexts/EventContext';
-import Calendar from '../Calendar/Calendar';
-import EventList from '../EventList/EventList';
-import Stats from '../Stats/Stats';
 import SearchFilters from '../SearchFilters/SearchFilters';
 import ViewToggle from '../ViewToggle/ViewToggle';
 import EventForm from '../EventForm/EventForm';
+
+// Lazy load components for better performance
+const Calendar = lazy(() => import('../Calendar/Calendar'));
+const EventList = lazy(() => import('../EventList/EventList'));
+const Stats = lazy(() => import('../Stats/Stats'));
 
 const MainApp = () => {
   const { events, createEvent, updateEvent, deleteEvent, searchEvents } = useEvents();
@@ -100,20 +102,37 @@ const MainApp = () => {
 
   // Renderizar contenido basado en la vista actual
   const renderContent = () => {
+    const LoadingSpinner = () => (
+      <div className="flex items-center justify-center py-12">
+        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <span className="ml-3 text-gray-600">Cargando...</span>
+      </div>
+    );
+
     switch (currentView) {
       case 'list':
         return (
-          <EventList
-            events={filteredEvents}
-            onEdit={handleEditEvent}
-            onDelete={handleDeleteEvent}
-          />
+          <Suspense fallback={<LoadingSpinner />}>
+            <EventList
+              events={filteredEvents}
+              onEdit={handleEditEvent}
+              onDelete={handleDeleteEvent}
+            />
+          </Suspense>
         );
       case 'stats':
-        return <Stats events={events} />;
+        return (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Stats events={events} />
+          </Suspense>
+        );
       case 'calendar':
       default:
-        return <Calendar />;
+        return (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Calendar />
+          </Suspense>
+        );
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useMemo } from 'react';
 import { eventService } from '../services/api';
 import reminderService from '../services/reminderService';
 
@@ -102,8 +102,8 @@ export const EventProvider = ({ children }) => {
     setView: (view) => dispatch({ type: ActionTypes.SET_VIEW, payload: view }),
   };
 
-  // Funciones de API
-  const fetchEvents = async () => {
+  // Funciones de API con useCallback para optimización
+  const fetchEvents = useCallback(async () => {
     try {
       actions.setLoading(true);
       const response = await eventService.getAllEvents();
@@ -148,9 +148,9 @@ export const EventProvider = ({ children }) => {
       actions.setEvents(demoEvents);
       actions.setLoading(false);
     }
-  };
+  }, [actions]);
 
-  const createEvent = async (eventData) => {
+  const createEvent = useCallback(async (eventData) => {
     try {
       actions.setLoading(true);
       const response = await eventService.createEvent(eventData);
@@ -188,9 +188,9 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(false);
       throw error;
     }
-  };
+  }, [actions]);
 
-  const updateEvent = async (id, eventData) => {
+  const updateEvent = useCallback(async (id, eventData) => {
     try {
       actions.setLoading(true);
       const updatedEvent = await eventService.updateEvent(id, eventData);
@@ -202,9 +202,9 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(false);
       throw error;
     }
-  };
+  }, [actions]);
 
-  const deleteEvent = async (id) => {
+  const deleteEvent = useCallback(async (id) => {
     try {
       actions.setLoading(true);
       await eventService.deleteEvent(id);
@@ -219,7 +219,7 @@ export const EventProvider = ({ children }) => {
       actions.setLoading(false);
       throw error;
     }
-  };
+  }, [actions]);
 
   const searchEvents = async (query) => {
     try {
@@ -270,7 +270,8 @@ export const EventProvider = ({ children }) => {
     };
   }, []);
 
-  const value = {
+  // Memoizar el valor del contexto para evitar re-renders innecesarios
+  const value = useMemo(() => ({
     ...state,
     ...actions,
     fetchEvents,
@@ -280,7 +281,7 @@ export const EventProvider = ({ children }) => {
     searchEvents,
     getEventsByDate,
     getEventsByDateRange,
-  };
+  }), [state, actions, fetchEvents, createEvent, updateEvent, deleteEvent, searchEvents, getEventsByDate, getEventsByDateRange]);
 
   return (
     <EventContext.Provider value={value}>
