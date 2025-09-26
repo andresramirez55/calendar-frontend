@@ -20,6 +20,8 @@ const getApiUrl = () => {
 console.log('API URL:', getApiUrl());
 console.log('Environment:', import.meta.env.MODE);
 console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+console.log('VITE_API_URL type:', typeof import.meta.env.VITE_API_URL);
+console.log('VITE_API_URL length:', import.meta.env.VITE_API_URL?.length);
 
 const api = axios.create({
   baseURL: getApiUrl(),
