@@ -28,10 +28,10 @@ const api = axios.create({
   },
 });
 
-// Interceptor para manejar errores y respuestas HTML
+// Interceptor simplificado para manejar errores
 api.interceptors.response.use(
   (response) => {
-    // Verificar si la respuesta es HTML (indica que el backend no está funcionando)
+    // Solo verificar HTML en respuestas exitosas si es realmente HTML
     if (response.data && typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
       console.warn('Backend returned HTML instead of JSON, backend may be down');
       throw new Error('BACKEND_NOT_AVAILABLE');
@@ -41,24 +41,19 @@ api.interceptors.response.use(
   (error) => {
     console.error('API Error:', error);
     
-    // Si es un error de red, mostrar mensaje más claro
+    // Solo manejar errores de red reales
     if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
-      console.warn('Backend not available, using demo mode');
+      console.warn('Network error, backend may be down');
       throw new Error('BACKEND_NOT_AVAILABLE');
     }
     
-    // Si es un error 404, el backend no está funcionando
-    if (error.response && error.response.status === 404) {
-      console.warn('Backend returned 404, backend may be down');
+    // Solo manejar 404 si es realmente un error de aplicación
+    if (error.response && error.response.status === 404 && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('Application not found')) {
+      console.warn('Backend application not found');
       throw new Error('BACKEND_NOT_AVAILABLE');
     }
     
-    // Si la respuesta es HTML, el backend no está funcionando
-    if (error.response && error.response.data && typeof error.response.data === 'string' && error.response.data.includes('<!doctype html>')) {
-      console.warn('Backend returned HTML, backend may be down');
-      throw new Error('BACKEND_NOT_AVAILABLE');
-    }
-    
+    // Pasar otros errores normalmente
     return Promise.reject(error);
   }
 );
@@ -79,7 +74,10 @@ export const eventService = {
 
   // Crear nuevo evento
   createEvent: async (eventData) => {
+    console.log('Creating event with data:', eventData);
+    console.log('API URL:', getApiUrl());
     const response = await api.post('/api/v1/events/', eventData);
+    console.log('Event creation response:', response);
     return response.data;
   },
 
