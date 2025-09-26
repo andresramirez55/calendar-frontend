@@ -122,7 +122,7 @@ const SimpleEventForm = ({ event, onClose }) => {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden mx-4" 
+        className="bg-white rounded-lg shadow-2xl max-w-sm w-full max-h-[85vh] overflow-hidden mx-2" 
         style={{ 
           position: 'fixed',
           top: '50%',
@@ -130,15 +130,15 @@ const SimpleEventForm = ({ event, onClose }) => {
           transform: 'translate(-50%, -50%)',
           zIndex: 10000,
           backgroundColor: 'white',
-          borderRadius: '12px',
+          borderRadius: '8px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           pointerEvents: 'auto'
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-white">
+          <h2 className="text-lg font-semibold text-gray-900">
             {event ? 'Editar Evento' : 'Nuevo Evento'}
           </h2>
           <button
@@ -150,17 +150,17 @@ const SimpleEventForm = ({ event, onClose }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-3 sm:p-4 max-h-[65vh] overflow-y-auto">
-          <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="p-3 max-h-[60vh] overflow-y-auto">
+          <div className="space-y-3">
             {/* Título */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-2">📝 Título *</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-1">📝 Título *</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                 placeholder="¿Qué evento vas a crear?"
                 required
               />
@@ -168,38 +168,38 @@ const SimpleEventForm = ({ event, onClose }) => {
 
             {/* Descripción */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-2">📄 Descripción</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-1">📄 Descripción</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md resize-none"
+                className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md resize-none"
                 placeholder="Cuéntanos más detalles sobre tu evento..."
-                rows={4}
+                rows={2}
               />
             </div>
 
             {/* Fecha y Hora */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">📅 Fecha *</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">📅 Fecha *</label>
                 <input
                   type="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">🕐 Hora *</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">🕐 Hora *</label>
                 <input
                   type="time"
                   name="time"
                   value={formData.time}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                   required
                 />
               </div>
@@ -207,51 +207,51 @@ const SimpleEventForm = ({ event, onClose }) => {
 
             {/* Hora de fin */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-2">🕐 Hora de fin</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-1">🕐 Hora de fin</label>
               <input
                 type="time"
                 name="end_time"
                 value={formData.end_time}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
               />
             </div>
 
             {/* Ubicación */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-2">📍 Ubicación</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-1">📍 Ubicación</label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                 placeholder="¿Dónde será el evento?"
               />
             </div>
 
             {/* Email y Teléfono */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">📧 Email *</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">📧 Email *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                   placeholder="tu@email.com"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">📱 Teléfono *</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">📱 Teléfono *</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                   placeholder="+1234567890"
                   required
                 />
@@ -259,14 +259,14 @@ const SimpleEventForm = ({ event, onClose }) => {
             </div>
 
             {/* Categoría y Prioridad */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">🏷️ Categoría</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">🏷️ Categoría</label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   <option value="work">💼 Trabajo</option>
                   <option value="personal">👤 Personal</option>
@@ -280,12 +280,12 @@ const SimpleEventForm = ({ event, onClose }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">⚡ Prioridad</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">⚡ Prioridad</label>
                 <select
                   name="priority"
                   value={formData.priority}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  className="w-full px-2 py-1 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   <option value="low">🟢 Baja</option>
                   <option value="medium">🟡 Media</option>
@@ -296,9 +296,9 @@ const SimpleEventForm = ({ event, onClose }) => {
 
             {/* Recordatorios */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-2">🔔 Recordatorios</label>
-              <div className="space-y-2 bg-gray-50 p-3 rounded-lg">
-                <label className="flex items-center cursor-pointer hover:bg-white p-2 rounded-lg transition-colors">
+              <label className="block text-sm font-semibold text-gray-800 mb-1">🔔 Recordatorios</label>
+              <div className="space-y-1 bg-gray-50 p-1 rounded">
+                <label className="flex items-center cursor-pointer hover:bg-white p-1 rounded transition-colors">
                   <input
                     type="checkbox"
                     name="reminder_day"
@@ -308,7 +308,7 @@ const SimpleEventForm = ({ event, onClose }) => {
                   />
                   <span className="text-base text-gray-700 font-medium">📅 Recordar el día del evento</span>
                 </label>
-                <label className="flex items-center cursor-pointer hover:bg-white p-2 rounded-lg transition-colors">
+                <label className="flex items-center cursor-pointer hover:bg-white p-1 rounded transition-colors">
                   <input
                     type="checkbox"
                     name="reminder_day_before"
@@ -318,7 +318,7 @@ const SimpleEventForm = ({ event, onClose }) => {
                   />
                   <span className="text-base text-gray-700 font-medium">⏰ Recordar el día anterior</span>
                 </label>
-                <label className="flex items-center cursor-pointer hover:bg-white p-2 rounded-lg transition-colors">
+                <label className="flex items-center cursor-pointer hover:bg-white p-1 rounded transition-colors">
                   <input
                     type="checkbox"
                     name="is_all_day"
@@ -333,17 +333,17 @@ const SimpleEventForm = ({ event, onClose }) => {
           </div>
 
           {/* Footer */}
-          <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end gap-3">
+          <div className="mt-2 pt-2 border-t border-gray-200 flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200 border border-gray-300 hover:border-gray-400"
+              className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded transition-all duration-200 border border-gray-300 hover:border-gray-400"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-200 transform hover:scale-105 disabled:transform-none"
+              className="px-3 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-200 transform hover:scale-105 disabled:transform-none"
               disabled={loading}
             >
               {loading ? (
