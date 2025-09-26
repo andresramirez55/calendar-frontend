@@ -2,7 +2,7 @@ import React, { useState, useMemo, lazy, Suspense } from 'react';
 import { useEvents } from '../../contexts/EventContext';
 import SearchFilters from '../SearchFilters/SearchFilters';
 import ViewToggle from '../ViewToggle/ViewToggle';
-import EventForm from '../EventForm/EventForm';
+import SimpleEventForm from '../EventForm/SimpleEventForm';
 
 // Lazy load components for better performance
 const Calendar = lazy(() => import('../Calendar/Calendar'));
@@ -172,7 +172,7 @@ const MainApp = () => {
 
       {/* Formulario de evento */}
       {showEventForm && (
-        <EventForm
+        <SimpleEventForm
           event={editingEvent}
           onClose={handleCloseForm}
         />
