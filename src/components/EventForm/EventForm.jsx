@@ -170,6 +170,21 @@ const EventForm = ({ event, onClose }) => {
     }
 
     try {
+      // Formatear la fecha para el backend (YYYY-MM-DD)
+      let formattedDate = formData.date;
+      if (formattedDate) {
+        // Si viene en formato ISO, extraer solo la fecha
+        if (formattedDate.includes('T')) {
+          formattedDate = formattedDate.split('T')[0];
+        }
+        // Si viene en formato Date, convertir a YYYY-MM-DD
+        if (formattedDate instanceof Date) {
+          formattedDate = formattedDate.toISOString().split('T')[0];
+        }
+      } else {
+        formattedDate = new Date().toISOString().split('T')[0];
+      }
+
       // Asegurar que los datos tengan el formato correcto
       const eventData = {
         ...formData,
@@ -178,15 +193,16 @@ const EventForm = ({ event, onClose }) => {
         location: formData.location?.trim() || '',
         email: formData.email.trim(),
         phone: formData.phone.trim(),
-        // Asegurar que la fecha tenga el formato correcto
-        date: formData.date ? `${formData.date}T00:00:00Z` : new Date().toISOString(),
+        // Formato correcto para el backend
+        date: formattedDate, // Formato YYYY-MM-DD para el backend
         time: formData.time || '00:00',
-        end_time: formData.end_time || formData.time || '00:00',
         // Valores por defecto para campos opcionales
         category: formData.category || 'other',
         priority: formData.priority || 'medium',
         reminder_day: Boolean(formData.reminder_day),
-        reminder_day_before: Boolean(formData.reminder_day_before)
+        reminder_day_before: Boolean(formData.reminder_day_before),
+        is_all_day: Boolean(formData.is_all_day),
+        color: formData.color || '#007AFF'
       };
 
       if (event) {

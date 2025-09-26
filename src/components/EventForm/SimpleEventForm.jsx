@@ -65,9 +65,24 @@ const SimpleEventForm = ({ event, onClose }) => {
       }
 
 
+      // Formatear la fecha para el backend (YYYY-MM-DD)
+      let formattedDate = formData.date;
+      if (formattedDate) {
+        // Si viene en formato ISO, extraer solo la fecha
+        if (formattedDate.includes('T')) {
+          formattedDate = formattedDate.split('T')[0];
+        }
+        // Si viene en formato Date, convertir a YYYY-MM-DD
+        if (formattedDate instanceof Date) {
+          formattedDate = formattedDate.toISOString().split('T')[0];
+        }
+      } else {
+        formattedDate = new Date().toISOString().split('T')[0];
+      }
+
       const eventData = {
         title: formData.title,
-        date: formData.date,
+        date: formattedDate, // Formato YYYY-MM-DD para el backend
         location: formData.location || '',
         reminder_day: formData.reminder_day,
         reminder_day_before: formData.reminder_day_before,
@@ -75,7 +90,8 @@ const SimpleEventForm = ({ event, onClose }) => {
         email: 'demo@ejemplo.com', // Email por defecto
         phone: '1234567890', // Teléfono por defecto
         category: 'personal', // Categoría por defecto
-        priority: 'medium' // Prioridad por defecto
+        priority: 'medium', // Prioridad por defecto
+        color: '#007AFF' // Color por defecto
       };
 
       console.log('Enviando datos:', eventData);
