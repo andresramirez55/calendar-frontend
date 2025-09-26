@@ -396,7 +396,7 @@ const Calendar = () => {
 
       {/* Formulario de evento */}
       {showEventForm && (
-        <EventForm
+        <SimpleEventForm
           event={editingEvent}
           onClose={handleCloseForm}
         />
