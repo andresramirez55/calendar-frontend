@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEvents } from '../../contexts/EventContext';
+import FamilySettings from '../FamilySettings/FamilySettings';
 
 const Layout = ({ children }) => {
   const { loading, error, clearError } = useEvents();
+  const [showFamilySettings, setShowFamilySettings] = useState(false);
 
   return (
     <div className="min-h-screen">
@@ -31,6 +33,12 @@ const Layout = ({ children }) => {
               <a href="#" className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50">
                 Estadísticas
               </a>
+              <button
+                onClick={() => setShowFamilySettings(true)}
+                className="text-gray-500 hover:text-blue-600 px-3 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-blue-50 flex items-center gap-2"
+              >
+                👨‍👩‍👧‍👦 Familia
+              </button>
             </nav>
 
             {/* Mobile menu button */}
@@ -82,6 +90,11 @@ const Layout = ({ children }) => {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Configuración familiar */}
+      {showFamilySettings && (
+        <FamilySettings onClose={() => setShowFamilySettings(false)} />
       )}
     </div>
   );

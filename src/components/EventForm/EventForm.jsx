@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEvents } from '../../contexts/EventContext';
 import { format } from 'date-fns';
+import { getFamilyCategories, getSharingOptions, getEventTemplates } from '../../config/familyConfig';
 
 const EventForm = ({ event, onClose }) => {
   const { createEvent, updateEvent, loading } = useEvents();
@@ -17,6 +18,11 @@ const EventForm = ({ event, onClose }) => {
     phone: '',
     reminder_day: false,
     reminder_day_before: false,
+    // Nuevos campos familiares
+    share_with: 'both', // both, parent1, parent2, private
+    kids_involved: [], // Array de nombres de niñas
+    is_family_event: true,
+    template: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -37,6 +43,10 @@ const EventForm = ({ event, onClose }) => {
         phone: event.phone || '',
         reminder_day: event.reminder_day || false,
         reminder_day_before: event.reminder_day_before || false,
+        share_with: event.share_with || 'both',
+        kids_involved: event.kids_involved || [],
+        is_family_event: event.is_family_event !== false,
+        template: event.template || ''
       });
     } else {
       // Valores por defecto para nuevo evento
@@ -55,6 +65,10 @@ const EventForm = ({ event, onClose }) => {
         phone: '',
         reminder_day: false,
         reminder_day_before: false,
+        share_with: 'both',
+        kids_involved: [],
+        is_family_event: true,
+        template: ''
       });
     }
   }, [event]);
@@ -299,7 +313,7 @@ const EventForm = ({ event, onClose }) => {
               />
             </div>
 
-            {/* Categoría */}
+            {/* Categoría Familiar */}
             <div>
               <label className="label">Categoría</label>
               <select
@@ -309,12 +323,42 @@ const EventForm = ({ event, onClose }) => {
                 className="input-field"
               >
                 <option value="">Seleccionar categoría</option>
-                <option value="work">Trabajo</option>
-                <option value="personal">Personal</option>
-                <option value="meeting">Reunión</option>
-                <option value="appointment">Cita</option>
-                <option value="reminder">Recordatorio</option>
-                <option value="other">Otro</option>
+                {getFamilyCategories().map(category => (
+                  <option key={category.value} value={category.value}>
+                    {category.icon} {category.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Plantillas de eventos */}
+            <div>
+              <label className="label">Plantilla rápida</label>
+              <select
+                name="template"
+                value={formData.template}
+                onChange={(e) => {
+                  const template = getEventTemplates().find(t => t.title === e.target.value);
+                  if (template) {
+                    setFormData(prev => ({
+                      ...prev,
+                      title: template.title,
+                      category: template.category,
+                      is_all_day: template.isAllDay,
+                      reminder_day: template.reminderDay,
+                      reminder_day_before: template.reminderDayBefore,
+                      color: template.color
+                    }));
+                  }
+                }}
+                className="input-field"
+              >
+                <option value="">Seleccionar plantilla</option>
+                {getEventTemplates().map(template => (
+                  <option key={template.title} value={template.title}>
+                    {template.title}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -363,6 +407,53 @@ const EventForm = ({ event, onClose }) => {
               {errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
               )}
+            </div>
+
+            {/* Compartir con */}
+            <div>
+              <label className="label">Compartir con</label>
+              <select
+                name="share_with"
+                value={formData.share_with}
+                onChange={handleChange}
+                className="input-field"
+              >
+                {Object.entries(getSharingOptions()).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Niñas involucradas */}
+            <div>
+              <label className="label">Niñas involucradas</label>
+              <div className="space-y-2">
+                {['María', 'Sofía', 'Ana', 'Lucía'].map(kid => (
+                  <label key={kid} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.kids_involved.includes(kid)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData(prev => ({
+                            ...prev,
+                            kids_involved: [...prev.kids_involved, kid]
+                          }));
+                        } else {
+                          setFormData(prev => ({
+                            ...prev,
+                            kids_involved: prev.kids_involved.filter(name => name !== kid)
+                          }));
+                        }
+                      }}
+                      className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                    />
+                    <span className="text-sm text-gray-700">👧 {kid}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Recordatorios */}
