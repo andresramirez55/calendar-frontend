@@ -137,34 +137,42 @@ const MainApp = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Toggle de vista */}
-      <ViewToggle
-        currentView={currentView}
-        onViewChange={setCurrentView}
-      />
+    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="container mx-auto px-4 py-6">
+        <div className="space-y-6">
+          {/* Toggle de vista */}
+          <div className="flex justify-center">
+            <ViewToggle
+              currentView={currentView}
+              onViewChange={setCurrentView}
+            />
+          </div>
 
-      {/* Filtros de búsqueda (solo para vista de lista) */}
-      {currentView === 'list' && (
-        <SearchFilters
-          onSearch={handleSearch}
-        />
-      )}
+          {/* Filtros de búsqueda (solo para vista de lista) */}
+          {currentView === 'list' && (
+            <SearchFilters
+              onSearch={handleSearch}
+            />
+          )}
 
-      {/* Botón de nuevo evento (solo para vista de lista) */}
-      {currentView === 'list' && (
-        <div className="flex justify-end">
-          <button
-            onClick={handleCreateEvent}
-            className="btn-primary"
-          >
-            ➕ Nuevo Evento
-          </button>
+          {/* Botón de nuevo evento (solo para vista de lista) */}
+          {currentView === 'list' && (
+            <div className="flex justify-end">
+              <button
+                onClick={handleCreateEvent}
+                className="btn-primary"
+              >
+                ➕ Nuevo Evento
+              </button>
+            </div>
+          )}
+
+          {/* Contenido principal */}
+          <div className="w-full">
+            {renderContent()}
+          </div>
         </div>
-      )}
-
-      {/* Contenido principal */}
-      {renderContent()}
+      </div>
 
       {/* Formulario de evento */}
       {showEventForm && (

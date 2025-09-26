@@ -46,8 +46,8 @@ const Layout = ({ children }) => {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="hover-lift">
+      <main className="w-full min-h-screen">
+        <div className="w-full">
           {children}
         </div>
       </main>

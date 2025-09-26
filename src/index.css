@@ -18,6 +18,8 @@ body {
   color: #1e293b;
   line-height: 1.6;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
@@ -215,13 +217,14 @@ body {
 
 /* Modern React Big Calendar Styling */
 .rbc-calendar {
-  height: 80vh;
+  height: 600px;
+  width: 100%;
   font-family: 'Inter', sans-serif;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border: none;
   overflow: hidden;
 }
 

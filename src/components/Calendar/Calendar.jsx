@@ -164,48 +164,18 @@ const Calendar = () => {
   };
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="w-full">
       {/* Header del calendario */}
-      <div style={{ 
-        backgroundColor: 'white', 
-        borderBottom: '1px solid #e2e8f0', 
-        padding: '1rem',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-          alignItems: window.innerWidth < 768 ? 'stretch' : 'center',
-          justifyContent: 'space-between',
-          gap: window.innerWidth < 768 ? '1rem' : '0.75rem'
-        }}>
-          <h1 style={{
-            fontSize: window.innerWidth < 768 ? '1.25rem' : '1.5rem',
-            fontWeight: 'bold',
-            color: '#1e293b',
-            margin: 0
-          }}>
-            📅 Mi Calendario
+      <div className="bg-white/95 backdrop-blur-lg rounded-t-2xl border-b border-white/20 shadow-lg p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <span className="text-3xl">📅</span>
+            Mi Calendario
           </h1>
           
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-            gap: '0.75rem', 
-            alignItems: 'center',
-            width: window.innerWidth < 768 ? '100%' : 'auto'
-          }}>
+          <div className="flex flex-col sm:flex-row gap-3 items-center w-full lg:w-auto">
             {selectedDateForDelete && (
-              <span style={{
-                fontSize: '0.875rem',
-                color: '#6b7280',
-                backgroundColor: '#f3f4f6',
-                padding: '0.5rem 1rem',
-                borderRadius: '0.5rem',
-                border: '1px solid #e5e7eb',
-                textAlign: 'center',
-                width: window.innerWidth < 768 ? '100%' : 'auto'
-              }}>
+              <span className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-lg border border-gray-200 text-center w-full sm:w-auto">
                 📅 {selectedDateForDelete}
               </span>
             )}
@@ -219,21 +189,7 @@ const Calendar = () => {
               return eventsOnDate.length > 0 ? (
                 <button
                   onClick={handleDeleteEventsFromDate}
-                  style={{
-                    backgroundColor: '#ef4444',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    border: 'none',
-                    borderRadius: '0.5rem',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    boxShadow: '0 2px 4px rgba(239, 68, 68, 0.3)',
-                    transition: 'all 0.2s ease',
-                    width: window.innerWidth < 768 ? '100%' : 'auto'
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#dc2626'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#ef4444'}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 shadow-lg w-full sm:w-auto"
                 >
                   🗑️ Eliminar ({eventsOnDate.length})
                 </button>
@@ -242,21 +198,7 @@ const Calendar = () => {
             
             <button
               onClick={() => setShowEventForm(true)}
-              style={{
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                border: 'none',
-                borderRadius: '0.5rem',
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-                fontWeight: '600',
-                boxShadow: '0 2px 4px rgba(59, 130, 246, 0.3)',
-                transition: 'all 0.2s ease',
-                width: window.innerWidth < 768 ? '100%' : 'auto'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+              className="btn-primary w-full sm:w-auto"
             >
               ➕ Nuevo Evento
             </button>
@@ -265,27 +207,14 @@ const Calendar = () => {
       </div>
 
       {/* Calendario principal */}
-      <div style={{ 
-        flex: 1, 
-        padding: window.innerWidth < 768 ? '0.5rem' : '1.5rem',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '1rem',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-          border: '1px solid #e5e7eb',
-          height: '100%',
-          minHeight: window.innerWidth < 768 ? '400px' : '600px',
-          overflow: 'hidden'
-        }}>
+      <div className="w-full p-4 lg:p-6">
+        <div className="bg-white/95 backdrop-blur-lg rounded-b-2xl shadow-xl border border-white/20 overflow-hidden min-h-[600px]">
                 <BigCalendar
                   localizer={localizer}
                   events={calendarEvents}
                   startAccessor="start"
                   endAccessor="end"
-                  style={{ height: '100%', minHeight: '600px' }}
+                  style={{ height: '600px', width: '100%' }}
                   onSelectEvent={handleSelectEvent}
                   onSelectSlot={handleSelectSlot}
                   onDoubleClickEvent={handleDoubleClickEvent}
