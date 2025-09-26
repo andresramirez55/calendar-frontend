@@ -31,27 +31,16 @@ const api = axios.create({
   },
 });
 
-// Interceptor para manejar errores y respuestas HTML
+// Interceptor simplificado para manejar errores
 api.interceptors.response.use(
-  (response) => {
-    // Verificar si la respuesta es HTML en lugar de JSON
-    const contentType = response.headers['content-type'];
-    if (contentType && contentType.includes('text/html')) {
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error);
+    
+    // Si es un error de red, mostrar mensaje más claro
+    if (error.code === 'ERR_NETWORK' || error.message.includes('ERR_FAILED')) {
       console.warn('Backend not available, using demo mode');
       throw new Error('BACKEND_NOT_AVAILABLE');
-    }
-    return response;
-  },
-  (error) => {
-    console.error('API Error:', error.response?.data || error.message);
-    
-    // Manejar errores específicos
-    if (error.response?.status === 404) {
-      throw new Error('El servicio no está disponible. Verifica que el backend esté funcionando.');
-    } else if (error.response?.status >= 500) {
-      throw new Error('Error del servidor. Intenta más tarde.');
-    } else if (error.code === 'NETWORK_ERROR' || !navigator.onLine) {
-      throw new Error('Sin conexión a internet.');
     }
     
     return Promise.reject(error);

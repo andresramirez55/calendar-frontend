@@ -299,7 +299,20 @@ export const EventProvider = ({ children }) => {
       return response;
     } catch (error) {
       console.error('Error creating event:', error);
-      actions.setError(`Error al crear evento: ${error.message}`);
+      
+      // Manejar errores específicos del backend
+      let errorMessage = 'Error al crear evento';
+      if (error.message.includes('BACKEND_NOT_AVAILABLE')) {
+        errorMessage = 'Backend no disponible, usando modo demostración';
+      } else if (error.message.includes('validation')) {
+        errorMessage = 'Error de validación: ' + error.message;
+      } else if (error.message.includes('required')) {
+        errorMessage = 'Campos requeridos faltantes: ' + error.message;
+      } else {
+        errorMessage = `Error al crear evento: ${error.message}`;
+      }
+      
+      actions.setError(errorMessage);
       actions.setLoading(false);
       throw error;
     }
