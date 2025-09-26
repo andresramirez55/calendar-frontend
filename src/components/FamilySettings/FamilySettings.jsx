@@ -21,10 +21,11 @@ const FamilySettings = ({ onClose }) => {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 9999,
+        zIndex: 99999,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }}
       onClick={onClose}
     >
@@ -32,7 +33,10 @@ const FamilySettings = ({ onClose }) => {
         className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden"
         style={{
           position: 'relative',
-          zIndex: 10000
+          zIndex: 100000,
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
         }}
         onClick={(e) => e.stopPropagation()}
       >
