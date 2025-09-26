@@ -18,10 +18,34 @@ const SimpleEventForm = ({ event, onClose }) => {
     priority: 'medium',
     reminder_day: true,
     reminder_day_before: true,
-    is_all_day: false
+    is_all_day: false,
+    // Nuevas funcionalidades familiares
+    notify_family: false,
+    notify_papa: false,
+    notify_mama: false,
+    child_tag: '',
+    family_members: []
   });
 
   const [loading, setLoading] = useState(false);
+  const [familyConfig, setFamilyConfig] = useState(null);
+
+  // Cargar configuración familiar
+  useEffect(() => {
+    const savedConfig = localStorage.getItem('familyConfig');
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        setFamilyConfig(config);
+        setFormData(prev => ({
+          ...prev,
+          family_members: config.familyMembers || []
+        }));
+      } catch (error) {
+        console.error('Error loading family config:', error);
+      }
+    }
+  }, []);
 
   // Cargar datos del evento si estamos editando
   useEffect(() => {
@@ -39,7 +63,12 @@ const SimpleEventForm = ({ event, onClose }) => {
         priority: event.priority || 'medium',
         reminder_day: Boolean(event.reminder_day),
         reminder_day_before: Boolean(event.reminder_day_before),
-        is_all_day: Boolean(event.is_all_day)
+        is_all_day: Boolean(event.is_all_day),
+        notify_family: Boolean(event.notify_family),
+        notify_papa: Boolean(event.notify_papa),
+        notify_mama: Boolean(event.notify_mama),
+        child_tag: event.child_tag || '',
+        family_members: event.family_members || []
       });
     }
   }, [event]);
@@ -226,6 +255,69 @@ const SimpleEventForm = ({ event, onClose }) => {
                 </span>
               </div>
             </div>
+
+            {/* Notificaciones familiares */}
+            {familyConfig && familyConfig.familyMembers && familyConfig.familyMembers.length > 0 && (
+              <div className="bg-pink-50 p-3 rounded-md">
+                <h4 className="text-sm font-medium text-pink-800 mb-2">👨‍👩‍👧‍👦 Notificar a la familia</h4>
+                
+                {/* Checkbox principal para notificar familia */}
+                <div className="flex items-center mb-3">
+                  <input
+                    type="checkbox"
+                    name="notify_family"
+                    checked={formData.notify_family}
+                    onChange={handleChange}
+                    className="mr-2 h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-pink-800">
+                    📱 Notificar a la familia sobre este evento
+                  </span>
+                </div>
+
+                {/* Selector de familiares específicos */}
+                {formData.notify_family && (
+                  <div className="space-y-2">
+                    {familyConfig.familyMembers.map((member, index) => (
+                      <div key={index} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name={`notify_${member.role.toLowerCase()}`}
+                          checked={formData[`notify_${member.role.toLowerCase()}`] || false}
+                          onChange={handleChange}
+                          className="mr-2 h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
+                        />
+                        <span className="text-sm text-pink-800">
+                          {member.role === 'papa' ? '👨' : '👩'} {member.name} ({member.email})
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Etiqueta para hijo */}
+                {formData.notify_family && familyConfig.kids && familyConfig.kids.length > 0 && (
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-pink-700 mb-1">
+                      👶 ¿Para qué hijo es este evento?
+                    </label>
+                    <select
+                      name="child_tag"
+                      value={formData.child_tag}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-pink-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-sm"
+                    >
+                      <option value="">Seleccionar hijo...</option>
+                      {familyConfig.kids.map((kid, index) => (
+                        <option key={index} value={kid.name}>
+                          👶 {kid.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Footer */}
