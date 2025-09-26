@@ -4,6 +4,10 @@ import { getDefaultContacts } from '../../config/familyConfig';
 const FamilySettings = ({ onClose }) => {
   const [familyMembers, setFamilyMembers] = useState(getDefaultContacts());
   const [kids, setKids] = useState(['María', 'Sofía', 'Ana', 'Lucía']);
+  
+  console.log('🔍 FamilySettings component mounted');
+  console.log('🔍 Initial family members:', familyMembers);
+  console.log('🔍 Initial kids:', kids);
 
   const handleSave = () => {
     // Guardar la configuración familiar completa
