@@ -31,26 +31,26 @@ const FamilySettings = ({ onClose }) => {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[70vh] overflow-hidden"
+        className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 max-h-[60vh] overflow-hidden"
         style={{
           position: 'relative',
           zIndex: 100000,
           backgroundColor: 'white',
-          borderRadius: '12px',
+          borderRadius: '8px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           overflow: 'hidden'
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-4 py-3 border-b border-gray-200">
+        <div className="px-3 py-2 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-sm font-semibold text-gray-900">
               👨‍👩‍👧‍👦 Familia
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+              className="text-gray-400 hover:text-gray-600 text-lg font-bold"
             >
               ✕
             </button>
@@ -58,15 +58,15 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Contenido */}
-        <div className="px-4 py-3 max-h-[50vh] overflow-y-auto space-y-3">
+        <div className="px-3 py-2 max-h-[45vh] overflow-y-auto space-y-2">
           {/* Miembros de la familia */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-2">👨‍👩‍👧‍👦 Padres</h4>
-            <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-gray-900 mb-1">👨‍👩‍👧‍👦 Padres</h4>
+            <div className="space-y-1">
               {familyMembers.map((member, index) => (
-                <div key={member.id} className="p-2 bg-gray-50 rounded-lg">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                <div key={member.id} className="p-2 bg-gray-50 rounded">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
                       <span className="text-blue-600 font-semibold text-xs">
                         {member.name.charAt(0)}
                       </span>
@@ -115,12 +115,12 @@ const FamilySettings = ({ onClose }) => {
 
           {/* Niñas */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-2">👧 Niñas</h4>
+            <h4 className="text-xs font-semibold text-gray-900 mb-1">👧 Niñas</h4>
             <div className="space-y-1">
               {kids.map((kid, index) => (
-                <div key={index} className="p-2 bg-pink-50 rounded-lg">
+                <div key={index} className="p-2 bg-pink-50 rounded">
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg">👧</span>
+                    <span className="text-sm">👧</span>
                     <input
                       type="text"
                       value={kid}
@@ -155,16 +155,16 @@ const FamilySettings = ({ onClose }) => {
         </div>
 
         {/* Botones */}
-        <div className="flex justify-end space-x-2 px-4 py-2 border-t border-gray-200">
+        <div className="flex justify-end space-x-2 px-3 py-2 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="px-3 py-1 text-gray-600 hover:text-gray-800 font-medium text-xs"
+            className="px-2 py-1 text-gray-600 hover:text-gray-800 font-medium text-xs"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
-            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium text-xs"
+            className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium text-xs"
           >
             💾 Guardar
           </button>
