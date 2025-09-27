@@ -132,13 +132,35 @@ const SimpleEventForm = ({ event, onClose }) => {
         family_members: JSON.stringify(familyConfig?.familyMembers || [])
       };
 
+      // Determinar el email principal para las notificaciones
+      let primaryEmail = 'demo@ejemplo.com'; // Email por defecto
+      let primaryPhone = '1234567890'; // Teléfono por defecto
+      
+      if (familyConfig?.familyMembers && familyConfig.familyMembers.length > 0) {
+        // Priorizar el email del papá si está configurado, sino usar el primero disponible
+        const papaMember = familyConfig.familyMembers.find(member => member.role === 'papa');
+        const mamaMember = familyConfig.familyMembers.find(member => member.role === 'mama');
+        
+        if (papaMember && papaMember.email) {
+          primaryEmail = papaMember.email;
+          primaryPhone = papaMember.phone || primaryPhone;
+        } else if (mamaMember && mamaMember.email) {
+          primaryEmail = mamaMember.email;
+          primaryPhone = mamaMember.phone || primaryPhone;
+        } else if (familyConfig.familyMembers[0] && familyConfig.familyMembers[0].email) {
+          // Usar el primer miembro disponible
+          primaryEmail = familyConfig.familyMembers[0].email;
+          primaryPhone = familyConfig.familyMembers[0].phone || primaryPhone;
+        }
+      }
+
       const eventData = {
         title: formData.title,
         date: formattedDate, // Formato YYYY-MM-DD para el backend
         time: '10:00', // Hora requerida por el backend
         location: formData.location || '',
-        email: 'demo@ejemplo.com', // Email por defecto
-        phone: '1234567890', // Teléfono por defecto
+        email: primaryEmail, // Email de la familia configurada
+        phone: primaryPhone, // Teléfono de la familia configurado
         reminder_day: formData.reminder_day,
         reminder_day_before: formData.reminder_day_before,
         is_all_day: false, // Cambiado a false para que funcione con el backend
@@ -149,9 +171,19 @@ const SimpleEventForm = ({ event, onClose }) => {
         ...familyData
       };
 
+      // Validar que tenemos un email válido
+      if (primaryEmail === 'demo@ejemplo.com') {
+        console.warn('⚠️ No se encontró email de familia configurado, usando email por defecto');
+        console.warn('⚠️ Recomendación: Configura la familia con emails válidos para recibir notificaciones');
+      } else {
+        console.log('✅ Email de familia configurado correctamente:', primaryEmail);
+      }
+
       console.log('🔍 Enviando datos al backend:', eventData);
       console.log('🔍 Datos familiares:', familyData);
       console.log('🔍 Configuración familiar:', familyConfig);
+      console.log('🔍 Email principal usado:', primaryEmail);
+      console.log('🔍 Teléfono principal usado:', primaryPhone);
 
       if (event) {
         // Actualizar evento existente
