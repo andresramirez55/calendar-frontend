@@ -107,6 +107,33 @@ const SimpleEventForm = ({ event, onClose }) => {
         return;
       }
 
+      // Validar configuración familiar si se activaron notificaciones familiares
+      if (formData.notify_family) {
+        if (!familyConfig || !familyConfig.familyMembers || familyConfig.familyMembers.length === 0) {
+          alert('⚠️ Para usar notificaciones familiares, primero debes configurar la familia.\n\nVe a "👨‍👩‍👧‍👦 Familia" y completa los datos de papá, mamá e hijos.');
+          setLoading(false);
+          return;
+        }
+
+        // Validar que al menos un miembro tenga email
+        const hasValidEmail = familyConfig.familyMembers.some(member => 
+          member.email && member.email !== '' && member.email !== 'demo@ejemplo.com'
+        );
+
+        if (!hasValidEmail) {
+          alert('⚠️ Para recibir notificaciones, al menos un miembro de la familia debe tener un email válido.\n\nVe a "👨‍👩‍👧‍👦 Familia" y configura emails reales.');
+          setLoading(false);
+          return;
+        }
+
+        // Validar que se haya seleccionado al menos un destinatario
+        if (!formData.notify_papa && !formData.notify_mama) {
+          alert('⚠️ Para notificar a la familia, debes seleccionar al menos a papá o mamá.');
+          setLoading(false);
+          return;
+        }
+      }
+
 
       // Formatear la fecha para el backend (YYYY-MM-DD)
       let formattedDate = formData.date;
@@ -175,6 +202,11 @@ const SimpleEventForm = ({ event, onClose }) => {
       if (primaryEmail === 'demo@ejemplo.com') {
         console.warn('⚠️ No se encontró email de familia configurado, usando email por defecto');
         console.warn('⚠️ Recomendación: Configura la familia con emails válidos para recibir notificaciones');
+        
+        // Si se activaron notificaciones familiares pero no hay email válido, mostrar advertencia
+        if (formData.notify_family) {
+          console.warn('⚠️ Notificaciones familiares activadas pero sin email válido - las notificaciones no se enviarán');
+        }
       } else {
         console.log('✅ Email de familia configurado correctamente:', primaryEmail);
       }
@@ -314,6 +346,33 @@ const SimpleEventForm = ({ event, onClose }) => {
                 </span>
               </div>
             </div>
+
+            {/* Indicador de configuración familiar */}
+            {!familyConfig || !familyConfig.familyMembers || familyConfig.familyMembers.length === 0 ? (
+              <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
+                <div className="flex items-center">
+                  <span className="text-yellow-600 mr-2">⚠️</span>
+                  <div>
+                    <p className="text-sm text-yellow-800 font-medium">Familia no configurada</p>
+                    <p className="text-xs text-yellow-700">
+                      Para usar notificaciones familiares, ve a "👨‍👩‍👧‍👦 Familia" y configura los datos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-green-50 border border-green-200 p-3 rounded-md mb-3">
+                <div className="flex items-center">
+                  <span className="text-green-600 mr-2">✅</span>
+                  <div>
+                    <p className="text-sm text-green-800 font-medium">Familia configurada</p>
+                    <p className="text-xs text-green-700">
+                      {familyConfig.familyMembers.length} miembro(s) configurado(s) - Notificaciones disponibles
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Notificaciones familiares */}
             {(() => {
