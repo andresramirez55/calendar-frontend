@@ -205,7 +205,9 @@ const EventForm = ({ event, onClose }) => {
         color: formData.color || '#007AFF'
       };
 
-      if (event) {
+      // Si el evento existe pero no tiene ID (por ejemplo, al crear desde el calendario),
+      // forzamos la creación en lugar de intentar un update con ID undefined.
+      if (event && event.id) {
         await updateEvent(event.id, eventData);
       } else {
         await createEvent(eventData);
@@ -225,7 +227,7 @@ const EventForm = ({ event, onClose }) => {
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">
-              {event ? 'Editar Evento' : 'Nuevo Evento'}
+              {event && event.id ? 'Editar Evento' : 'Nuevo Evento'}
             </h3>
             <button
               onClick={onClose}
@@ -515,7 +517,7 @@ const EventForm = ({ event, onClose }) => {
               className="btn-primary"
               disabled={loading}
             >
-              {loading ? 'Guardando...' : (event ? 'Actualizar' : 'Crear')}
+              {loading ? 'Guardando...' : (event && event.id ? 'Actualizar' : 'Crear')}
             </button>
           </div>
         </form>
